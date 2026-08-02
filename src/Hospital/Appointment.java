@@ -3,7 +3,7 @@ package Hospital;
 import java.time.*;
 import Hospital.enums.AppointmentStatus;
 
-public class Appointment implements DisplayInformation{
+public class Appointment implements DisplayInformation, Comparable<Appointment>{
 
     private Patient patient;
     private Doctor doctor;
@@ -51,5 +51,16 @@ public class Appointment implements DisplayInformation{
 
     public void setApStatus(AppointmentStatus apStatus) {
         this.apStatus = apStatus;
+    }
+
+    // Sort
+    @Override
+    public int compareTo(Appointment other) {
+        int result = this.date.compareTo(other.date);
+
+        if(result != 0){
+            return result;
+        }
+        return this.time.compareTo(other.time);
     }
 }

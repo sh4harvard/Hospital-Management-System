@@ -3,6 +3,8 @@ package Hospital;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import Hospital.enums.AppointmentStatus;
 
 public class HospitalSystem {
@@ -12,6 +14,7 @@ public class HospitalSystem {
     private ArrayList<Ward> wards;
     private ArrayList<Appointment> appointments;
     private ArrayList<MedicalService> medicalServices;
+    private ArrayList<HospitalIncomeService> hospitalIncomeServices;
 
     #
     private double budget;
@@ -93,8 +96,13 @@ public class HospitalSystem {
                     if (doctor.isAppointmentAvailable(date, time)){
                         Appointment appointment = new Appointment(patient, doctor, date, time);
                         appointments.add(appointment);
+                        Collections.sort(appointments);
+
                         doctor.addAppointment(appointment);
+                        Collections.sort(doctor.getAppointments());
+
                         patient.addAppointment(appointment);
+                        Collections.sort(patient.getAppointments());
 
                         #budget += 100;
                     }
@@ -131,6 +139,14 @@ public class HospitalSystem {
         return null;
     }
 
+    // Budget
+    public double getTotalHospitalBudget(){
+        double budget = 0;
+        for (HospitalIncomeService income: hospitalIncomeServices){
+            budget += income.getAmount();
+        }
 
+        return budget;
+    }
 }
 
