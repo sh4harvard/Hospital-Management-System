@@ -69,11 +69,9 @@ public class Ward implements DisplayInformation{
 
 
     public String showInfo(){
-        System.out.println(
-            "===== Ward (" + name + ") Information =====" +
+        return "===== Ward (" + name + ") Information =====" +
             "\nCapacity: " + capacity +
             "\nCurrent Patients: " + patients.size() +
-            "\nDoctors: " + doctors.size());
+            "\nDoctors: " + doctors.size();
     }
-
 }

@@ -49,12 +49,10 @@ public class MedicalRecord implements DisplayInformation{
     }
 
     public String showInfo(){
-        System.out.println(
-            "===== Patient's Medical Record =====" +
+        return "===== Patient's Medical Record =====" +
             "\nDiagnosis: " + diagnosis +
             "\nPrescription: " + prescription +
             "\nNotes: " + notes +
-            "\nLast Diagnosis Date: " + lastDiagnoseDate
-        );
+            "\nLast Diagnosis Date: " + lastDiagnoseDate;
     }
 }

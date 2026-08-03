@@ -53,24 +53,23 @@ public class Bill implements DisplayInformation{
     @Override
     public String showInfo() {
         if (charges.isEmpty()) {
-            System.out.println("No charges.");
-            return;
+            return "No charges.";
         }
 
+        String result = "";
 
-
-        System.out.println(
-            "========== BILL ==========" +
-            "\n--------------------------\n"
-        );
+        result += "========== BILL ==========" +
+            "\n--------------------------\n";
 
         for (Charge c:charges){
-            c.showInfo();
+            result += c.showInfo();
         }
 
-        System.out.println("-------------------------\n");
-        System.out.println("Total Paid:  T" + getTotalPaid());
-        System.out.println("Total Remaining:  T" + getTotalUnpaid());
-        System.out.println("Grand Total:  T" + getTotal());
+        result += "-------------------------\n" +
+        "\nTotal Paid:  T" + getTotalPaid() +
+        "\nTotal Remaining:  T" + getTotalUnpaid() +
+        "\nGrand Total:  T" + getTotal();
+
+        return result;
     }
 }

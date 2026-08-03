@@ -24,8 +24,6 @@ public class Charge implements DisplayInformation{
 
     @Override
     public String showInfo() {
-        System.out.println(
-            service.getName() + "    " + service.getCost() + "T    " + ((payStatus) ? "Paid" : "")
-        );
+        return service.getName() + "    " + service.getCost() + "T    " + ((payStatus) ? "Paid" : "");
     }
 }
