@@ -50,6 +50,7 @@ public class Ward implements DisplayInformation{
 
     public void removePatient(Patient patient){
         patients.remove(patient);
+        patient.setWard(null);
     }
 
     public ArrayList<Doctor> getDoctors() {
@@ -67,7 +68,7 @@ public class Ward implements DisplayInformation{
     }
 
 
-    public void showInfo(){
+    public String showInfo(){
         System.out.println(
             "===== Ward (" + name + ") Information =====" +
             "\nCapacity: " + capacity +

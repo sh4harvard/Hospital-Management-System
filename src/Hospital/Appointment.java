@@ -35,14 +35,13 @@ public class Appointment implements DisplayInformation, Comparable<Appointment>{
         return time;
     }
 
-    public void showInfo(){
-        System.out.println(
-                "===== Appointment's Information =====" +
-                "\nPatient: " + patient +
-                "\nDoctor: " + doctor +
-                "\ndate " + date +
-                "\nTime " + time
-        );
+    public String showInfo(){
+        return
+            "===== Appointment's Information =====" +
+            "\nPatient: " + patient +
+            "\nDoctor: " + doctor +
+            "\ndate " + date +
+            "\nTime " + time;
     }
 
     public AppointmentStatus getApStatus() {

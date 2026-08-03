@@ -14,20 +14,21 @@ public class HospitalSystem {
     private ArrayList<Ward> wards;
     private ArrayList<Appointment> appointments;
     private ArrayList<MedicalService> medicalServices;
-    private ArrayList<HospitalIncomeService> hospitalIncomeServices;
-
-    #
-    private double budget;
-    #
+    private ArrayList<HospitalIncome> hospitalIncomes;
 
     public HospitalSystem(){
-        appointments = new ArrayList<>();
         patients = new ArrayList<>();
         doctors = new ArrayList<>();
         wards = new ArrayList<>();
         appointments = new ArrayList<>();
+        medicalServices = new ArrayList<>();
+        hospitalIncomes = new ArrayList<>();
 
-        budget = 0;
+        // TODO: DB for medical services cost
+        MedicalService appBooking = new MedicalService(1, "Booking Appointment", 100);
+        medicalServices.add(appBooking);
+        Ward emergency = new Ward("Emergency", 200);
+        wards.add(emergency);
     }
 
     // Patient Section
@@ -51,13 +52,14 @@ public class HospitalSystem {
     }
 
     public void dischargePatient(Patient patient){
-
-        patient.getWard().removePatient(patient);
-        if (patient.getWard().getPatients().size() == 0){
-            System.out.println("Successfully Ward empty");
-            #budget += 500;
+        Ward pw = patient.getWard();
+        if (pw != null) {
+            if (pw.getPatients().size() == 1) {
+                System.out.println("Successfully Ward empty");
+                hospitalIncomes.add(new WardBonus(pw));
+            }
+            pw.removePatient(patient);
         }
-        patient.setWard(null);
     }
 
 
@@ -88,6 +90,18 @@ public class HospitalSystem {
         return null;
     }
 
+    public void transferWardPatient(Patient patient, Ward newWard){
+        dischargePatient(patient);
+        patient.setWard(newWard);
+    }
+
+    public void transferWardDoctor(Doctor doctor, Ward newWard){
+        if (doctor.getWard() != null){
+            doctor.getWard().removeDoctor(doctor);
+        }
+        doctor.setWard(newWard);
+    }
+
     // Appointment Section
     public void createAppointment(Patient patient, Doctor doctor, LocalDate date, LocalTime time){
         if (patient.getWard() == null || patient.getWard() == doctor.getWard()){
@@ -104,13 +118,18 @@ public class HospitalSystem {
                         patient.addAppointment(appointment);
                         Collections.sort(patient.getAppointments());
 
-                        #budget += 100;
+                        hospitalIncomes.add(new IncomeMedicalService(findMedicalServicebyId(1), patient));
+                        patient.getBill().addCharge(new Charge(findMedicalServicebyId(1)));
+                        return;
                     }
                     System.out.println("Appointment is full at time, date");
+                    return;
                 }
                 System.out.println("Out of doctors shift");
+                return;
             }
             System.out.println("Doctor is full");
+            return;
         }
         System.out.println("Doctor isn't in this ward");
     }
@@ -142,7 +161,7 @@ public class HospitalSystem {
     // Budget
     public double getTotalHospitalBudget(){
         double budget = 0;
-        for (HospitalIncomeService income: hospitalIncomeServices){
+        for (HospitalIncome income: hospitalIncomes){
             budget += income.getAmount();
         }
 

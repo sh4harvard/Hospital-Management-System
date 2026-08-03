@@ -1,12 +1,12 @@
 package Hospital;
 
-public class HospitalIncomeService implements DisplayInformation{
+public class IncomeMedicalService implements HospitalIncomencome {
 
     private MedicalService medicalService;
     private Patient patient;
     private double amount;
 
-    public HospitalIncomeService(MedicalService medicalService, Patient patient) {
+    public IncomeMedicalService(MedicalService medicalService, Patient patient) {
         this.medicalService = medicalService;
         this.patient = patient;
         amount = medicalService.getCost();
@@ -25,8 +25,8 @@ public class HospitalIncomeService implements DisplayInformation{
     }
 
     @Override
-    public void showInfo() {
-        System.out.println(medicalService.getId() + "\t" + medicalService.getName() +"\t"+ medicalService.getCost()
-                +"\t"+ patient.getId() +"\t"+ patient.getName());
+    public String showInfo() {
+        return medicalService.getId() + "\t" + medicalService.getName() +"\t"+ medicalService.getCost()
+                +"\t"+ patient.getId() +"\t"+ patient.getName();
     }
 }

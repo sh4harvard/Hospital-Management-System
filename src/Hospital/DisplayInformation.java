@@ -1,5 +1,5 @@
 package Hospital;
 
 public interface DisplayInformation {
-    public void showInfo();
+    public String showInfo();
 }

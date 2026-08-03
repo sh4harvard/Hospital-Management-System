@@ -2,6 +2,7 @@ package Hospital;
 
 import Hospital.enums.Gender;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Patient extends Person implements DisplayInformation{
@@ -16,22 +17,26 @@ public class Patient extends Person implements DisplayInformation{
 
         medicalRecord = new MedicalRecord();
         bill = new Bill();
+        appointments = new ArrayList<>();
     }
 
     @Override
-    public void showInfo() {
-        System.out.println(
-                "===== Patient's Information =====" +
-                        "\nID: " + getId() +
-                        "\nAge: " + getAge() +
-                        "\nName: " + getName() +
-                        "\nGender: " + getGender() +
-                        "\nPhone: " + getPhoneNumber() +
-                        "\nMedical Information: " + medicalRecord.showInfo() +
-                        "\nBill: " + bill.showInfo() +
-                        "\nAppointments: " + appointments.showInfo() +
-                        "\nWard: " + ward.showInfo()
-        );
+    public String showInfo() {
+        String app = "";
+        for (Appointment ap : appointments) {
+            app += ap.showInfo();
+        }
+
+        return "===== Patient's Information =====" +
+            "\nID: " + getId() +
+            "\nAge: " + getAge() +
+            "\nName: " + getName() +
+            "\nGender: " + getGender() +
+            "\nPhone: " + getPhoneNumber() +
+            "\nMedical Information: " + medicalRecord.showInfo() +
+            "\nBill: " + bill.showInfo() +
+            "\nWard: " + ward.showInfo() +
+            "\nAppointments: " + app;
     }
 
     public MedicalRecord getMedicalRecord() {

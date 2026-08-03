@@ -51,7 +51,7 @@ public class Bill implements DisplayInformation{
     }
 
     @Override
-    public void showInfo() {
+    public String showInfo() {
         if (charges.isEmpty()) {
             System.out.println("No charges.");
             return;

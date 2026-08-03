@@ -48,7 +48,7 @@ public class MedicalRecord implements DisplayInformation{
         this.lastDiagnoseDate = lastDiagnoseDate;
     }
 
-    public void showInfo(){
+    public String showInfo(){
         System.out.println(
             "===== Patient's Medical Record =====" +
             "\nDiagnosis: " + diagnosis +

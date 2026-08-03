@@ -23,6 +23,7 @@ public class Doctor extends Person implements DisplayInformation{
         this.dailyCapacity = dailyCapacity;
         this.shiftStart = shiftStart;
         this.shiftEnd = shiftEnd;
+        appointments = new ArrayList<>();
     }
 
     @Override
@@ -105,12 +106,12 @@ public class Doctor extends Person implements DisplayInformation{
     }
 
     public boolean isAvailableWithinShift(LocalTime time){
-        return !(time.isBefore(shiftStart) && time.isAfter(shiftEnd));
+        return !(time.isBefore(shiftStart) || time.isAfter(shiftEnd));
     }
 
     public boolean isAppointmentAvailable(LocalDate date, LocalTime time){
         for (Appointment ap : appointments){
-            if (ap.getDate() == date && ap.getTime() == time){
+            if (ap.getDate().equals(date) && ap.getTime().equals(time)){
                 return false;
             }
         }
