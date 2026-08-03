@@ -27,20 +27,19 @@ public class Doctor extends Person implements DisplayInformation{
     }
 
     @Override
-    public void showInfo() {
-        System.out.println(
-                "===== Doctor's Information =====" +
-                "\nID: " + getId() +
-                "\nAge: " + getAge() +
-                "\nName: " + getName() +
-                "\nGender: " + getGender() +
-                "\nPhone: " + getPhoneNumber() +
-                "\nSpecialty: " + getSpecialty() +
-                "\nWard: " + getWard() +
-                "\ndailyCapacity: " + getDailyCapacity() +
-                "\nshiftStart: " + getShiftStart() +
-                "\nshiftEnd: " + getShiftEnd()
-        );
+    public String showInfo() {
+        return
+            "===== Doctor's Information =====" +
+            "\nID: " + getId() +
+            "\nAge: " + getAge() +
+            "\nName: " + getName() +
+            "\nGender: " + getGender() +
+            "\nPhone: " + getPhoneNumber() +
+            "\nSpecialty: " + getSpecialty() +
+            "\nWard: " + getWard() +
+            "\ndailyCapacity: " + getDailyCapacity() +
+            "\nshiftStart: " + getShiftStart() +
+            "\nshiftEnd: " + getShiftEnd();
     }
 
     public String getSpecialty() {

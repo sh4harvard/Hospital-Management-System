@@ -1,6 +1,6 @@
 package Hospital;
 
-public class IncomeMedicalService implements HospitalIncomencome {
+public class IncomeMedicalService implements HospitalIncome {
 
     private MedicalService medicalService;
     private Patient patient;

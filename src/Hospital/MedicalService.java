@@ -28,9 +28,7 @@ public class MedicalService implements DisplayInformation{
     }
 
     @Override
-    public void showInfo() {
-        System.out.println(
-            id + "    " + name + "    " + cost
-        );
+    public String showInfo() {
+        return id + "    " + name + "    " + cost;
     }
 }
