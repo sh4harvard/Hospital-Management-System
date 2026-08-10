@@ -1,8 +1,6 @@
 package Hospital;
 
 import Hospital.enums.Gender;
-
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class Patient extends Person implements DisplayInformation{
@@ -35,7 +33,7 @@ public class Patient extends Person implements DisplayInformation{
             "\nPhone: " + getPhoneNumber() +
             "\nMedical Information: " + medicalRecord.showInfo() +
             "\nBill: " + bill.showInfo() +
-            "\nWard: " + ward.showInfo() +
+            "\nWard: " + ((ward != null) ? ward.showInfo() : "none") +
             "\nAppointments: " + app;
     }
 
