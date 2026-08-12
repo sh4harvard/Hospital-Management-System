@@ -19,7 +19,7 @@ public class MainFrame extends JFrame{
 
         add(new MenuPanel(), BorderLayout.WEST);
 
-        add(new ContentPanel(), BorderLayout.CENTER);
+        add(new PatientDetailPanel(), BorderLayout.CENTER);
 
         setVisible(true);
     }
