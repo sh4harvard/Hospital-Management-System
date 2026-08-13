@@ -67,9 +67,6 @@ public class PatientDetailPanel extends JPanel {
         infotabs.add("Appointments", new AppointmentsPanel());
 
 
-
-
-
         // Footer
 
     }

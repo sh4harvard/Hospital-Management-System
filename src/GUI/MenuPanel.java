@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MenuPanel extends JPanel {
-    public MenuPanel(){
+    public MenuPanel(ContentPanel contentPanel){
 
         setLayout(new BorderLayout());
 
@@ -20,6 +20,20 @@ public class MenuPanel extends JPanel {
         sectionPanel.add(patientBtn);
         sectionPanel.add(doctorBtn);
         sectionPanel.add(appointmentBtn);
+
+        // Action
+        hospitalBtn.addActionListener(e -> {
+            contentPanel.showPanel("HOSPITAL");
+        });
+        patientBtn.addActionListener(e -> {
+            contentPanel.showPanel("PATIENTS");
+        });
+        doctorBtn.addActionListener(e -> {
+            contentPanel.showPanel("DOCTORS");
+        });
+        appointmentBtn.addActionListener(e -> {
+            contentPanel.showPanel("APPOINTMENTS");
+        });
 
         JPanel exitPanel = new JPanel();
 
