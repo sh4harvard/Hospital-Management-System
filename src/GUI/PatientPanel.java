@@ -53,15 +53,13 @@ public class PatientPanel extends JPanel {
 
         // Footer
         JPanel buttonPanel = new JPanel();
-        JButton viewButton = new JButton("View Patient");
-        JButton editButton = new JButton("Edit");
-        JButton deleteButton = new JButton("Delete");
-        JButton mrecordButton = new JButton("Medical Record");
+        JButton viewBtn = new JButton("View Patient");
+        JButton editBtn = new JButton("Edit");
+        JButton deleteBtn = new JButton("Delete");
 
-        buttonPanel.add(viewButton);
-        buttonPanel.add(editButton);
-        buttonPanel.add(deleteButton);
-        buttonPanel.add(mrecordButton);
+        buttonPanel.add(viewBtn);
+        buttonPanel.add(editBtn);
+        buttonPanel.add(deleteBtn);
 
         add(buttonPanel, BorderLayout.SOUTH);
 

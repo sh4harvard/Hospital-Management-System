@@ -14,8 +14,8 @@ public class PatientDetailPanel extends JPanel {
         JButton backtoBtn = new JButton("<- Patients");
         JLabel patientID = new JLabel("Patient #10");
 
-        headerPanel.add(backtoBtn, BorderLayout.EAST);
-        headerPanel.add(patientID, BorderLayout.WEST);
+        headerPanel.add(backtoBtn, BorderLayout.WEST);
+        headerPanel.add(patientID, BorderLayout.EAST);
         add(headerPanel, BorderLayout.NORTH);
 
 
@@ -42,13 +42,13 @@ public class PatientDetailPanel extends JPanel {
 
         JPanel infoTable = new JPanel(new GridLayout(2, 4));
         infoTable.add(new JLabel("Age:"));
-        infoTable.add(new JLabel("24:"));
+        infoTable.add(new JLabel("24"));
         infoTable.add(new JLabel("Phone:"));
-        infoTable.add(new JLabel("09124837294:"));
+        infoTable.add(new JLabel("09124837294"));
         infoTable.add(new JLabel("Gender:"));
-        infoTable.add(new JLabel("Male:"));
+        infoTable.add(new JLabel("Male"));
         infoTable.add(new JLabel("Ward:"));
-        infoTable.add(new JLabel("Emergency:"));
+        infoTable.add(new JLabel("Emergency"));
         patientINFO.add(infoTable, BorderLayout.CENTER);
 
         basicINFO.add(patientINFO, BorderLayout.CENTER);
@@ -65,6 +65,7 @@ public class PatientDetailPanel extends JPanel {
         infotabs.add("Medical Record", new MedicalRecordPanel());
         infotabs.add("Bill", new BillPanel());
         infotabs.add("Appointments", new AppointmentsPanel());
+
 
 
 
