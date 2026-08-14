@@ -1,10 +1,30 @@
-import GUI.MainFrame;
-import Hospital.HospitalSystem;
+import Database.DatabaseLoader;
+import Hospital.Core.HospitalSystem;
+import Hospital.GUI.MainFrame;
+
+import javax.swing.*;
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
 
-        HospitalSystem hospitalSystem = new HospitalSystem();
-        new MainFrame();
+        HospitalSystem hospital = new HospitalSystem();
+
+        try {
+            DatabaseLoader loader = new DatabaseLoader(hospital);
+            loader.load();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // Start GUI after everything fully loaded
+        SwingUtilities.invokeLater(() -> {
+
+            MainFrame frame = new MainFrame(hospital);
+
+            frame.setVisible(true);
+        });
     }
 }
