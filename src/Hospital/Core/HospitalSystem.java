@@ -166,13 +166,13 @@ public class HospitalSystem {
         return null;
     }
 
-    public void admitPatient(Patient patient, Ward ward){
-        if (ward.getCapacity() > ward.getPatients().size()){
-            patient.setWard(ward);
-            System.out.println("success");
-            return;
+    public boolean admitPatient(Patient patient, Ward ward) {
+
+        if (ward.addPatient(patient)) {
+            return true;
         }
-        System.out.println("Wars full");
+
+        return false;
     }
 
     public void dischargePatient(Patient patient){
@@ -270,7 +270,7 @@ public class HospitalSystem {
                         Collections.sort(patient.getAppointments());
 
                         hospitalIncomes.add(new IncomeMedicalService(findMedicalServicebyId(1), patient));
-                        patient.getBill().addCharge(new Charge(nextChargeId, findMedicalServicebyId(1), LocalDate.now()));
+                        patient.getBill().addCharge(new Charge(generateChargeId(), findMedicalServicebyId(1), LocalDate.now()));
                         return appointment;
                     }
                     System.out.println("Appointment is full at time, date");

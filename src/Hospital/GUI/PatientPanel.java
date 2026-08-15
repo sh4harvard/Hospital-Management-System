@@ -13,7 +13,9 @@ public class PatientPanel extends JPanel {
     private final ContentPanel contentPanel;
     private final HospitalSystem hospital;
 
+
     private JTable tablePatients;
+    private DefaultTableModel tableModel;
     private final String[] tableTitles = {"ID", "Name", "Age", "Gender", "Phone", "Ward"};
     private final int tableCol = tableTitles.length;
 
@@ -79,6 +81,22 @@ public class PatientPanel extends JPanel {
 
         // Center
         tablePatients = new JTable();
+
+        tableModel = new DefaultTableModel(
+                new String[]{
+                        "ID",
+                        "Name",
+                        "Age",
+                        "Gender",
+                        "Phone",
+                        "Ward"
+                },
+                0
+        );
+
+        tablePatients = new JTable(tableModel);
+
+        refreshTable();
 
         refreshPatientTable();
 
@@ -157,5 +175,26 @@ public class PatientPanel extends JPanel {
         }
 
         tablePatients.setModel(new DefaultTableModel(tableData, tableTitles));
+    }
+
+    public void refreshTable() {
+
+        tableModel.setRowCount(0);
+
+        for (Patient patient : hospital.getPatients()) {
+
+            Object[] row = {
+                    patient.getId(),
+                    patient.getName(),
+                    patient.getAge(),
+                    patient.getGender(),
+                    patient.getPhoneNumber(),
+                    patient.getWard() != null
+                            ? patient.getWard().getName()
+                            : "None"
+            };
+
+            tableModel.addRow(row);
+        }
     }
 }

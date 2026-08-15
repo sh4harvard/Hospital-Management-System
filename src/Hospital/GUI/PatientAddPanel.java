@@ -30,51 +30,41 @@ public class PatientAddPanel extends JPanel {
 
         JLabel title = new JLabel("Add Patient");
         title.setFont(new Font("Arial", Font.BOLD, 24));
+
         add(title, BorderLayout.NORTH);
 
         //
 
-        JPanel addFormPanel = new JPanel(new BorderLayout());
-
-        addFormPanel.add(new JLabel("Personal Information"), BorderLayout.NORTH);
-
         JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
 
         nameField = new JTextField();
+        ageField = new JTextField();
+        genderBox = new JComboBox<>(Gender.values());
+        phoneField = new JTextField();
+        wardBox = new JComboBox<>();
+
+        refreshWards();
 
         formPanel.add(new JLabel("Name:"));
         formPanel.add(nameField);
 
-        ageField = new JTextField();
-
         formPanel.add(new JLabel("Age:"));
         formPanel.add(ageField);
-
-        genderBox = new JComboBox<>(Gender.values());
 
         formPanel.add(new JLabel("Gender:"));
         formPanel.add(genderBox);
 
-        phoneField = new JTextField();
-
         formPanel.add(new JLabel("Phone:"));
         formPanel.add(phoneField);
-
-        wardBox = new JComboBox<>();
-        for (Ward ward : hospital.getWards()) {
-            wardBox.addItem(ward);
-        }
 
         formPanel.add(new JLabel("Ward:"));
         formPanel.add(wardBox);
 
-
-        addFormPanel.add(formPanel, BorderLayout.CENTER);
-        add(addFormPanel, BorderLayout.CENTER);
+        add(formPanel, BorderLayout.CENTER);
 
         //
 
-        JPanel footerBtns = new JPanel(new FlowLayout((FlowLayout.RIGHT)));
+        JPanel buttonPanel = new JPanel();
 
         JButton cancelBtn = new JButton("Cancel");
         JButton saveBtn = new JButton("Add Patient");
@@ -83,12 +73,15 @@ public class PatientAddPanel extends JPanel {
                 contentPanel.showPatients()
         );
 
-        saveBtn.addActionListener(e -> savePatient());
+        saveBtn.addActionListener(e ->
+                savePatient()
+        );
 
-        footerBtns.add(cancelBtn);
-        footerBtns.add(saveBtn);
+        buttonPanel.add(cancelBtn);
+        buttonPanel.add(saveBtn);
 
-        add(footerBtns, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.SOUTH);
+
     }
 
     private void savePatient() {
@@ -97,11 +90,16 @@ public class PatientAddPanel extends JPanel {
         String ageText = ageField.getText().trim();
         String phone = phoneField.getText().trim();
 
-        if (name.isEmpty() || ageText.isEmpty() || phone.isEmpty()) {
+
+        if (name.isEmpty() ||
+                ageText.isEmpty() ||
+                phone.isEmpty()) {
+
             JOptionPane.showMessageDialog(
                     this,
-                    "Please fill in all required fields."
+                    "Please fill in all fields."
             );
+
             return;
         }
 
@@ -109,31 +107,53 @@ public class PatientAddPanel extends JPanel {
 
         try {
             age = Integer.parseInt(ageText);
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
+
             JOptionPane.showMessageDialog(
                     this,
                     "Age must be a number."
             );
+
+            return;
+        }
+
+        if (age <= 0) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Age must be greater than 0."
+            );
+
             return;
         }
 
         Gender gender = (Gender) genderBox.getSelectedItem();
+
         Ward ward = (Ward) wardBox.getSelectedItem();
+
 
         int id = hospital.generatePatientId();
 
-        Patient patient = new Patient(
-                id,
-                name,
-                age,
-                gender,
-                phone
-        );
+        Patient patient = new Patient(id, name, age, gender, phone);
 
-        hospital.addPatient(patient);
+        hospital.getPatients().add(patient);
+
 
         if (ward != null) {
-            hospital.admitPatient(patient, ward);
+
+            if (!hospital.admitPatient(patient, ward)) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "The selected ward is full."
+                );
+
+                // remove the patient because the admission failed
+                hospital.getPatients().remove(patient);
+
+                return;
+            }
         }
 
         JOptionPane.showMessageDialog(
@@ -141,6 +161,32 @@ public class PatientAddPanel extends JPanel {
                 "Patient added successfully."
         );
 
+        clearFields();
+
         contentPanel.showPatients();
+    }
+
+    private void refreshWards() {
+
+        wardBox.removeAllItems();
+
+        for (Ward ward : hospital.getWards()) {
+            wardBox.addItem(ward);
+        }
+    }
+
+    public void clearFields() {
+
+        nameField.setText("");
+        ageField.setText("");
+        phoneField.setText("");
+
+        genderBox.setSelectedIndex(0);
+
+        wardBox.removeAllItems();
+
+        for (Ward ward : hospital.getWards()) {
+            wardBox.addItem(ward);
+        }
     }
 }

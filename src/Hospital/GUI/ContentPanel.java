@@ -2,6 +2,7 @@ package Hospital.GUI;
 
 import Hospital.Core.HospitalSystem;
 import Hospital.Core.Patient;
+import Hospital.Core.Ward;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,10 +24,10 @@ public class ContentPanel extends JPanel {
         cardLayout = new CardLayout();
         setLayout(cardLayout);
 
-
+        patientPanel = new PatientPanel(hospital, this);
         patientAddPanel = new PatientAddPanel(hospital, this);
         patientDetailPanel = new PatientDetailPanel(hospital, this);
-        patientEditPanel = new PatientEditPanel(hospital, this);
+        patientEditPanel = new PatientEditPanel(hospital);
 
         add(patientPanel, "PATIENTS");
         add(patientAddPanel, "PATIENT_ADD");
@@ -63,18 +64,4 @@ public class ContentPanel extends JPanel {
         showPanel("PATIENT_EDIT");
     }
 
-    public void clearFields() {
-
-        nameField.setText("");
-        ageField.setText("");
-        phoneField.setText("");
-
-        genderBox.setSelectedIndex(0);
-
-        wardBox.removeAllItems();
-
-        for (Ward ward : hospital.getWards()) {
-            wardBox.addItem(ward);
-        }
-    }
 }
