@@ -26,6 +26,11 @@ public class ContentPanel extends JPanel {
     private final HAppointmentsPanel appointmentPanel;
     private final AppointmentAddPanel appointmentAddPanel;
 
+    private final HospitalPanel hospitalPanel;
+
+    private final WardPanel wardPanel;
+    private final WardDetailPanel wardDetailPanel;
+
 
     public ContentPanel(HospitalSystem hospital){
 
@@ -56,7 +61,13 @@ public class ContentPanel extends JPanel {
         add(doctorEditPanel, "DOCTOR_EDIT");
 
 
-        add(new HospitalPanel(hospital), "HOSPITAL");
+        wardPanel = new WardPanel(hospital, this);
+        wardDetailPanel = new WardDetailPanel(hospital, this);
+        add(wardPanel, "WARDS");
+        add(wardDetailPanel, "WARD_DETAIL");
+
+        hospitalPanel = new HospitalPanel(hospital, this);
+        add(hospitalPanel, "HOSPITAL");
 
         appointmentPanel = new HAppointmentsPanel(hospital, this);
         add(appointmentPanel, "APPOINTMENTS");
@@ -118,8 +129,20 @@ public class ContentPanel extends JPanel {
     }
 
     public void showAppointments() {
+
+        System.out.println("SHOW APPOINTMENTS");
+
         appointmentPanel.refreshTable();
+
+        System.out.println("REFRESH DONE");
+
         showPanel("APPOINTMENTS");
+
+        System.out.println("SHOW PANEL DONE");
+
+        System.out.println(
+                "Visible card: " + appointmentPanel.isVisible()
+        );
     }
 
     public void showAppointmentAdd() {
@@ -127,7 +150,21 @@ public class ContentPanel extends JPanel {
         showPanel("APPOINTMENT_ADD");
     }
 
+    public void showWards() {
+        wardPanel.refreshTable();
+        showPanel("WARDS");
+    }
 
+    public void showWardDetail(Ward ward) {
+        wardDetailPanel.setWard(ward);
+        showPanel("WARD_DETAIL");
+    }
+
+    public void showHospital() {
+        hospitalPanel.refresh();
+        showPanel("HOSPITAL");
+    }
 
 
 }
+

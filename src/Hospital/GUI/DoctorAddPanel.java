@@ -155,37 +155,20 @@ public class DoctorAddPanel extends JPanel {
         try {
 
             String name = nameField.getText().trim();
-            int age = Integer.parseInt(ageField.getText().trim());
+            String ageText = ageField.getText().trim();
             String phone = phoneField.getText().trim();
-
-            String specialty =
-                    specialtyField.getText().trim();
-
-            int capacity =
-                    Integer.parseInt(
-                            capacityField.getText().trim()
-                    );
-
-            LocalTime shiftStart =
-                    LocalTime.parse(
-                            shiftStartField.getText().trim()
-                    );
-
-            LocalTime shiftEnd =
-                    LocalTime.parse(
-                            shiftEndField.getText().trim()
-                    );
-
-            Gender gender =
-                    (Gender) genderBox.getSelectedItem();
-
-            Ward ward =
-                    (Ward) wardBox.getSelectedItem();
-
+            String specialty = specialtyField.getText().trim();
+            String capacityText = capacityField.getText().trim();
+            String shiftStartText = shiftStartField.getText().trim();
+            String shiftEndText = shiftEndField.getText().trim();
 
             if (name.isEmpty()
+                    || ageText.isEmpty()
                     || phone.isEmpty()
-                    || specialty.isEmpty()) {
+                    || specialty.isEmpty()
+                    || capacityText.isEmpty()
+                    || shiftStartText.isEmpty()
+                    || shiftEndText.isEmpty()) {
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -195,40 +178,47 @@ public class DoctorAddPanel extends JPanel {
                 return;
             }
 
-            if (age <= 0) {
+            int age = Integer.parseInt(ageText);
+            int capacity = Integer.parseInt(capacityText);
 
+            LocalTime shiftStart =
+                    LocalTime.parse(shiftStartText);
+
+            LocalTime shiftEnd =
+                    LocalTime.parse(shiftEndText);
+
+            Gender gender =
+                    (Gender) genderBox.getSelectedItem();
+
+            Ward ward =
+                    (Ward) wardBox.getSelectedItem();
+
+            if (age <= 0) {
                 JOptionPane.showMessageDialog(
                         this,
                         "Age must be greater than zero."
                 );
-
                 return;
             }
 
             if (capacity <= 0) {
-
                 JOptionPane.showMessageDialog(
                         this,
                         "Capacity must be greater than zero."
                 );
-
                 return;
             }
 
             if (!shiftStart.isBefore(shiftEnd)) {
-
                 JOptionPane.showMessageDialog(
                         this,
                         "Shift start must be before shift end."
                 );
-
                 return;
             }
 
-
             int id = hospital.generateDoctorId();
 
-            // Create Doctor
             Doctor doctor = new Doctor(
                     id,
                     name,
@@ -241,7 +231,6 @@ public class DoctorAddPanel extends JPanel {
                     shiftStart,
                     shiftEnd
             );
-
 
             hospital.addDoctor(doctor);
 

@@ -200,6 +200,10 @@ public class AppointmentAddPanel extends JPanel {
         );
 
 
+        System.out.println("1 - After success message");
+
         contentPanel.showAppointments();
+
+        System.out.println("2 - After showAppointments");
     }
 }

@@ -322,18 +322,4 @@ public class DoctorPanel extends JPanel {
         contentPanel.showDoctorEdit(doctor);
     }
 
-    private void deleteSelectedDoctor() {
-
-        Doctor doctor = getSelectedDoctor();
-
-        if (doctor == null) {
-            return;
-        }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Delete functionality will be added next."
-        );
-    }
-
 }

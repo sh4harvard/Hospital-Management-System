@@ -185,7 +185,8 @@ public class HospitalSystem {
 
             ward.removePatient(patient);
 
-            if (ward.getPatients().isEmpty()) {
+            if (ward.getPatients().isEmpty()
+                    && findWardBonusByWardId(ward.getId()) == null) {
                 hospitalIncomes.add(new WardBonus(ward));
             }
         }
@@ -383,36 +384,47 @@ public class HospitalSystem {
                         time
                 );
 
+
         appointments.add(appointment);
+
 
         Collections.sort(appointments);
 
         doctor.addAppointment(appointment);
 
-        Collections.sort(
-                doctor.getAppointments()
-        );
+
+        Collections.sort(doctor.getAppointments());
 
         patient.addAppointment(appointment);
 
-        Collections.sort(
-                patient.getAppointments()
-        );
+        Collections.sort(patient.getAppointments());
 
-        hospitalIncomes.add(
-                new IncomeMedicalService(
-                        findMedicalServicebyId(1),
-                        patient
-                )
-        );
 
-        patient.getBill().addCharge(
-                new Charge(
-                        generateChargeId(),
-                        findMedicalServicebyId(1),
-                        LocalDate.now()
-                )
-        );
+        MedicalService consultation = findMedicalServicebyId(1);
+
+        if (consultation == null) {
+            lastAppointmentError =
+                    "No medical service with ID 1 exists.";
+            return null;
+        }
+
+        if (consultation != null) {
+
+            hospitalIncomes.add(
+                    new IncomeMedicalService(
+                            consultation,
+                            patient
+                    )
+            );
+
+            patient.getBill().addCharge(
+                    new Charge(
+                            generateChargeId(),
+                            consultation,
+                            LocalDate.now()
+                    )
+            );
+        }
 
         return appointment;
     }
@@ -421,10 +433,29 @@ public class HospitalSystem {
         appointment.setApStatus(AppointmentStatus.COMPLETED);
     }
 
-    public void cancelAppointment(Appointment appointment){
+    public void cancelAppointment(Appointment appointment) {
+
         appointments.remove(appointment);
-        appointment.getPatient().getAppointments().remove(appointment);
-        appointment.getDoctor().getAppointments().remove(appointment);
+
+        Patient patient = appointment.getPatient();
+
+        patient.getAppointments().remove(appointment);
+
+        appointment.getDoctor()
+                .getAppointments()
+                .remove(appointment);
+
+        // Remove the consultation charge created for this appointment
+        ArrayList<Charge> charges =
+                new ArrayList<>(patient.getBill().getCharges());
+
+        for (Charge charge : charges) {
+
+            if (charge.getService().getId() == 1) {
+                patient.getBill().removeCharge(charge);
+                break;
+            }
+        }
     }
 
     // Medical Services Section
@@ -453,10 +484,20 @@ public class HospitalSystem {
         return null;
     }
 
-    public void deleteMedicalService(MedicalService service) {
-        medicalServices.remove(service);
-    }
+    public boolean deleteMedicalService(MedicalService service) {
 
+        for (Patient patient : patients) {
+
+            for (Charge charge : patient.getBill().getCharges()) {
+
+                if (charge.getService() == service) {
+                    return false;
+                }
+            }
+        }
+
+        return medicalServices.remove(service);
+    }
     // Budget
 
     public ArrayList<HospitalIncome> getHospitalIncomes() {return hospitalIncomes;}

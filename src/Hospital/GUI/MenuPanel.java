@@ -23,7 +23,7 @@ public class MenuPanel extends JPanel {
 
         // Action
         hospitalBtn.addActionListener(e -> {
-            contentPanel.showPanel("HOSPITAL");
+            contentPanel.showHospital();
         });
         patientBtn.addActionListener(e -> {
             contentPanel.showPanel("PATIENTS");

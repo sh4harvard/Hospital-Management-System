@@ -156,7 +156,7 @@ public class MedicalServicePanel extends JPanel {
             return;
         }
 
-        int newId = getNextId();
+        int newId = hospital.generateMedicalServiceId();
 
         MedicalService service =
                 new MedicalService(
@@ -358,7 +358,18 @@ public class MedicalServicePanel extends JPanel {
             return;
         }
 
-        hospital.deleteMedicalService(service);
+        boolean deleted =
+                hospital.deleteMedicalService(service);
+
+        if (!deleted) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "This medical service is already used in a patient bill."
+            );
+
+            return;
+        }
 
         refreshTable();
 
@@ -368,18 +379,7 @@ public class MedicalServicePanel extends JPanel {
         );
     }
 
-    private int getNextId() {
 
-        int maxId = 0;
 
-        for (MedicalService service :
-                hospital.getMedicalServices()) {
 
-            if (service.getId() > maxId) {
-                maxId = service.getId();
-            }
-        }
-
-        return maxId + 1;
-    }
 }

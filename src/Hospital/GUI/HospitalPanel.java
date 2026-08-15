@@ -8,10 +8,17 @@ import java.awt.*;
 public class HospitalPanel extends JPanel{
 
     private final HospitalSystem hospital;
+    private final ContentPanel contentPanel;
+    private final HospitalBillPanel billingPanel;
+
+    private JLabel patientCount;
+    private JLabel doctorCount;
+    private JLabel wardCount;
 
 
-    public HospitalPanel(HospitalSystem hospital){
+    public HospitalPanel(HospitalSystem hospital, ContentPanel contentPanel){
         this.hospital = hospital;
+        this.contentPanel = contentPanel;
 
         setLayout(new BorderLayout());
 
@@ -32,8 +39,7 @@ public class HospitalPanel extends JPanel{
         JPanel patientStat = new JPanel(new GridLayout(2, 1));
         JLabel patientTitle = new JLabel("PATIENTS", JLabel.CENTER);
         patientTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        JLabel patientCount = new JLabel("120", JLabel.CENTER);
-        patientCount.setFont(new Font("Arial", Font.BOLD, 30));
+        patientCount = new JLabel(String.valueOf(hospital.getPatients().size()), JLabel.CENTER);        patientCount.setFont(new Font("Arial", Font.BOLD, 30));
         patientStat.add(patientTitle);
         patientStat.add(patientCount);
 
@@ -42,8 +48,7 @@ public class HospitalPanel extends JPanel{
         JPanel doctorStat = new JPanel(new GridLayout(2, 1));
         JLabel doctorTitle = new JLabel("DOCTORS", JLabel.CENTER);
         doctorTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        JLabel doctorCount = new JLabel("50", JLabel.CENTER);
-        doctorCount.setFont(new Font("Arial", Font.BOLD, 30));
+        doctorCount = new JLabel(String.valueOf(hospital.getDoctors().size()), JLabel.CENTER);        doctorCount.setFont(new Font("Arial", Font.BOLD, 30));
         doctorStat.add(doctorTitle);
         doctorStat.add(doctorCount);
 
@@ -52,8 +57,7 @@ public class HospitalPanel extends JPanel{
         JPanel wardStat = new JPanel(new GridLayout(2, 1));
         JLabel wardTitle = new JLabel("Ward", JLabel.CENTER);
         wardTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        JLabel wardCount = new JLabel("20", JLabel.CENTER);
-        wardCount.setFont(new Font("Arial", Font.BOLD, 30));
+        wardCount = new JLabel(String.valueOf(hospital.getWards().size()), JLabel.CENTER);        wardCount.setFont(new Font("Arial", Font.BOLD, 30));
         wardStat.add(wardTitle);
         wardStat.add(wardCount);
 
@@ -66,13 +70,37 @@ public class HospitalPanel extends JPanel{
 
         JTabbedPane hinfoTabs = new JTabbedPane();
 
-        hinfoTabs.add("Wards", new WardPanel());
+        hinfoTabs.add("Wards", new WardPanel(hospital, contentPanel));
         hinfoTabs.add("Medical Services", new MedicalServicePanel(hospital));
-        hinfoTabs.add("Billing", new HospitalBillPanel());
+        billingPanel = new HospitalBillPanel(hospital);
+        hinfoTabs.add("Billing", billingPanel);
+
+
 
         mainBody.add(hinfoTabs, BorderLayout.CENTER);
 
 
         add(mainBody, BorderLayout.CENTER);
+    }
+
+    public void refreshBilling() {
+        billingPanel.refreshTable();
+    }
+
+    public void refresh() {
+
+        patientCount.setText(
+                String.valueOf(hospital.getPatients().size())
+        );
+
+        doctorCount.setText(
+                String.valueOf(hospital.getDoctors().size())
+        );
+
+        wardCount.setText(
+                String.valueOf(hospital.getWards().size())
+        );
+
+        billingPanel.refreshTable();
     }
 }

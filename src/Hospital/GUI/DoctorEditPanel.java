@@ -237,45 +237,21 @@ public class DoctorEditPanel extends JPanel {
 
         try {
 
-            String name =
-                    nameField.getText().trim();
+            String name = nameField.getText().trim();
+            String ageText = ageField.getText().trim();
+            String phone = phoneField.getText().trim();
+            String specialty = specialtyField.getText().trim();
+            String capacityText = capacityField.getText().trim();
+            String shiftStartText = shiftStartField.getText().trim();
+            String shiftEndText = shiftEndField.getText().trim();
 
-            String phone =
-                    phoneField.getText().trim();
-
-            String specialty =
-                    specialtyField.getText().trim();
-
-            int age =
-                    Integer.parseInt(
-                            ageField.getText().trim()
-                    );
-
-            int capacity =
-                    Integer.parseInt(
-                            capacityField.getText().trim()
-                    );
-
-            LocalTime shiftStart =
-                    LocalTime.parse(
-                            shiftStartField.getText().trim()
-                    );
-
-            LocalTime shiftEnd =
-                    LocalTime.parse(
-                            shiftEndField.getText().trim()
-                    );
-
-            Gender gender =
-                    (Gender) genderBox.getSelectedItem();
-
-            Ward newWard =
-                    (Ward) wardBox.getSelectedItem();
-
-            // Validation
             if (name.isEmpty()
+                    || ageText.isEmpty()
                     || phone.isEmpty()
-                    || specialty.isEmpty()) {
+                    || specialty.isEmpty()
+                    || capacityText.isEmpty()
+                    || shiftStartText.isEmpty()
+                    || shiftEndText.isEmpty()) {
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -285,33 +261,43 @@ public class DoctorEditPanel extends JPanel {
                 return;
             }
 
-            if (age <= 0) {
+            int age = Integer.parseInt(ageText);
+            int capacity = Integer.parseInt(capacityText);
 
+            LocalTime shiftStart =
+                    LocalTime.parse(shiftStartText);
+
+            LocalTime shiftEnd =
+                    LocalTime.parse(shiftEndText);
+
+            Gender gender =
+                    (Gender) genderBox.getSelectedItem();
+
+            Ward newWard =
+                    (Ward) wardBox.getSelectedItem();
+
+            // Validation
+            if (age <= 0) {
                 JOptionPane.showMessageDialog(
                         this,
                         "Age must be greater than zero."
                 );
-
                 return;
             }
 
             if (capacity <= 0) {
-
                 JOptionPane.showMessageDialog(
                         this,
                         "Capacity must be greater than zero."
                 );
-
                 return;
             }
 
             if (!shiftStart.isBefore(shiftEnd)) {
-
                 JOptionPane.showMessageDialog(
                         this,
                         "Shift start must be before shift end."
                 );
-
                 return;
             }
 
@@ -329,7 +315,6 @@ public class DoctorEditPanel extends JPanel {
 
             // Update ward
             if (doctor.getWard() != newWard) {
-
                 hospital.transferWardDoctor(
                         doctor,
                         newWard

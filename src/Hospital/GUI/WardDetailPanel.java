@@ -1,99 +1,202 @@
 package Hospital.GUI;
 
+import Hospital.Core.Doctor;
+import Hospital.Core.HospitalSystem;
+import Hospital.Core.Patient;
+import Hospital.Core.Ward;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class WardDetailPanel extends JPanel {
-    public WardDetailPanel(){
+
+    private final HospitalSystem hospital;
+    private final ContentPanel contentPanel;
+
+    private Ward ward;
+
+    private JLabel wardID;
+    private JLabel nameLabel;
+    private JLabel capacityLabel;
+    private JLabel patientsLabel;
+    private JLabel doctorsLabel;
+
+    public WardDetailPanel(
+            HospitalSystem hospital,
+            ContentPanel contentPanel) {
+
+        this.hospital = hospital;
+        this.contentPanel = contentPanel;
 
         setLayout(new BorderLayout());
 
-        //
+        // Header
+        JPanel headerPanel =
+                new JPanel(new BorderLayout());
 
-        JPanel headerPanel = new JPanel(new BorderLayout());
+        JButton backBtn =
+                new JButton("<- Wards");
 
-        JButton backtoBtn = new JButton("<- Wards");
-        JLabel title = new JLabel("Ward Detail");
-        headerPanel.add(backtoBtn, BorderLayout.WEST);
-        headerPanel.add(title, BorderLayout.EAST);
+        wardID = new JLabel();
 
-        add(headerPanel, BorderLayout.NORTH);
+        wardID.setFont(
+                new Font("Arial", Font.BOLD, 18)
+        );
 
-        //
+        headerPanel.add(
+                backBtn,
+                BorderLayout.WEST
+        );
 
-        JPanel mainBodyPanel = new JPanel(new BorderLayout());
+        headerPanel.add(
+                wardID,
+                BorderLayout.EAST
+        );
 
-
-        JPanel infoPanel = new JPanel(new BorderLayout());
-
-        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel titleWard = new JLabel("Emergency");
-        titlePanel.add(titleWard);
-        infoPanel.add(titlePanel, BorderLayout.NORTH);
-
-        JPanel detailPanel = new JPanel(new BorderLayout());
-        detailPanel.add(new JLabel("Ward Information"), BorderLayout.NORTH);
-
-        JPanel detailWard = new JPanel(new GridLayout(3, 2));
-        detailWard.add(new JLabel("Capacity:"));
-        detailWard.add(new JLabel("200"));
-        detailWard.add(new JLabel("Occupied:"));
-        detailWard.add(new JLabel("150"));
-        detailWard.add(new JLabel("Available:"));
-        detailWard.add(new JLabel("50"));
-
-        detailPanel.add(detailWard, BorderLayout.CENTER);
-        infoPanel.add(detailPanel, BorderLayout.CENTER);
-
-        mainBodyPanel.add(infoPanel, BorderLayout.NORTH);
+        add(
+                headerPanel,
+                BorderLayout.NORTH
+        );
 
 
+        // Main
+        JPanel mainPanel =
+                new JPanel(new BorderLayout());
 
-        JPanel pdlistPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        JPanel infoPanel =
+                new JPanel(
+                        new GridLayout(4, 2, 10, 10)
+                );
 
+        infoPanel.setBorder(
+                BorderFactory.createEmptyBorder(
+                        20, 20, 20, 20
+                )
+        );
 
-        JPanel patientsPanel = new JPanel(new BorderLayout());
+        infoPanel.add(new JLabel("Name:"));
 
-        patientsPanel.add(new JLabel("Patients"), BorderLayout.NORTH);
-
-        String[] patientTitles = {
-            "ID", "Name", "Age", "Gender", "Phone"
-        };
-        Object[][] patientData = {
-            {101, "Ali Ahmadi", 25, "Male", "091294837294"},
-            {102, "Sara Mohammadi", 19, "Female", "09129483949"}
-        };
-
-        JTable patientTable = new JTable(patientData, patientTitles);
-        patientTable.setRowHeight(30);
-
-        patientsPanel.add(new JScrollPane(patientTable), BorderLayout.CENTER);
-
-        pdlistPanel.add(patientsPanel);
+        nameLabel = new JLabel();
+        infoPanel.add(nameLabel);
 
 
+        infoPanel.add(new JLabel("Capacity:"));
 
-        JPanel doctorsPanel = new JPanel(new BorderLayout());
+        capacityLabel = new JLabel();
+        infoPanel.add(capacityLabel);
 
-        doctorsPanel.add(new JLabel("Doctors"), BorderLayout.NORTH);
 
-        String[] doctorTitles = {
-            "ID", "Name", "Specialty", "Shift", "Capacity"
-        };
-        Object[][] doctorData = {
-            {201, "Dr. Ahmadi", "Emergency", "08:00 - 16:00", "20"},
-            {202, "Dr. Karimi", "Emergency", "10:00 - 18:00", "15"}
-        };
+        infoPanel.add(new JLabel("Patients:"));
 
-        JTable doctorTable = new JTable(doctorData, doctorTitles);
-        doctorTable.setRowHeight(30);
+        patientsLabel = new JLabel();
+        infoPanel.add(patientsLabel);
 
-        doctorsPanel.add(new JScrollPane(doctorTable), BorderLayout.CENTER);
 
-        pdlistPanel.add(doctorsPanel);
+        infoPanel.add(new JLabel("Doctors:"));
 
-        mainBodyPanel.add(pdlistPanel, BorderLayout.CENTER);
+        doctorsLabel = new JLabel();
+        infoPanel.add(doctorsLabel);
 
-        add(mainBodyPanel, BorderLayout.CENTER);
+
+        mainPanel.add(
+                infoPanel,
+                BorderLayout.NORTH
+        );
+
+
+        // Patient and Doctor lists
+        JPanel listsPanel =
+                new JPanel(
+                        new GridLayout(1, 2, 20, 0)
+                );
+
+
+        // Patients
+        JPanel patientPanel =
+                new JPanel(new BorderLayout());
+
+        patientPanel.add(
+                new JLabel("Patients"),
+                BorderLayout.NORTH
+        );
+
+        JList<String> patientList =
+                new JList<>();
+
+        patientPanel.add(
+                new JScrollPane(patientList),
+                BorderLayout.CENTER
+        );
+
+
+        // Doctors
+        JPanel doctorPanel =
+                new JPanel(new BorderLayout());
+
+        doctorPanel.add(
+                new JLabel("Doctors"),
+                BorderLayout.NORTH
+        );
+
+        JList<String> doctorList =
+                new JList<>();
+
+        doctorPanel.add(
+                new JScrollPane(doctorList),
+                BorderLayout.CENTER
+        );
+
+
+        listsPanel.add(patientPanel);
+        listsPanel.add(doctorPanel);
+
+        mainPanel.add(
+                listsPanel,
+                BorderLayout.CENTER
+        );
+
+
+        add(
+                mainPanel,
+                BorderLayout.CENTER
+        );
+
+
+        // Back button
+        backBtn.addActionListener(e ->
+                contentPanel.showWards()
+        );
+    }
+
+
+    public void setWard(Ward ward) {
+
+        this.ward = ward;
+
+        wardID.setText(
+                "Ward #" + ward.getId()
+        );
+
+        nameLabel.setText(
+                ward.getName()
+        );
+
+        capacityLabel.setText(
+                String.valueOf(
+                        ward.getCapacity()
+                )
+        );
+
+        patientsLabel.setText(
+                ward.getPatients().size()
+                        + " / "
+                        + ward.getCapacity()
+        );
+
+        doctorsLabel.setText(
+                String.valueOf(
+                        ward.getDoctors().size()
+                )
+        );
     }
 }
