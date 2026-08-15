@@ -23,7 +23,7 @@ public class ContentPanel extends JPanel {
         cardLayout = new CardLayout();
         setLayout(cardLayout);
 
-        patientPanel = new PatientPanel(hospital, this);
+
         patientAddPanel = new PatientAddPanel(hospital, this);
         patientDetailPanel = new PatientDetailPanel(hospital, this);
         patientEditPanel = new PatientEditPanel(hospital, this);

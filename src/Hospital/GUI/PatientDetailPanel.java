@@ -105,14 +105,6 @@ public class PatientDetailPanel extends JPanel {
 
         JTabbedPane infotabs = new JTabbedPane();
 
-        detailINFO.setLayout(new BorderLayout());
-        detailINFO.add(infotabs, BorderLayout.CENTER);
-
-        patientDisplayINFO.add(detailINFO, BorderLayout.CENTER);
-
-        add(patientDisplayINFO, BorderLayout.CENTER);
-
-
         infotabs.add("Medical Record", medicalRecordPanel);
         infotabs.add("Bill", billPanel);
         infotabs.add("Appointments", appointmentsPanel);
