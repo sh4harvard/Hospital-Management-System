@@ -10,16 +10,16 @@ import java.util.ArrayList;
 
 public class PatientPanel extends JPanel {
 
-
-
+    private final ContentPanel contentPanel;
     private final HospitalSystem hospital;
 
     private JTable tablePatients;
     private final String[] tableTitles = {"ID", "Name", "Age", "Gender", "Phone", "Ward"};
     private final int tableCol = tableTitles.length;
 
-    public PatientPanel(HospitalSystem hospital){
+    public PatientPanel(HospitalSystem hospital, ContentPanel contentPanel){
         this.hospital = hospital;
+        this.contentPanel = contentPanel;
 
         setLayout(new BorderLayout());
 
@@ -30,6 +30,11 @@ public class PatientPanel extends JPanel {
         JLabel section = new JLabel("Patients");
         patientsectionPanel.add(section, BorderLayout.WEST);
         JButton addPatient = new JButton("Add Patient");
+
+        addPatient.addActionListener(e ->
+                contentPanel.showPatientAdd()
+        );
+
         patientsectionPanel.add(addPatient, BorderLayout.EAST);
         headerPanel.add(patientsectionPanel, BorderLayout.NORTH);
 
@@ -101,9 +106,11 @@ public class PatientPanel extends JPanel {
                 return;
             }
 
-            int patientId = (int) tablePatients.getValueAt(selectedRow, 0);
+            int patientId =
+                    (int) tablePatients.getValueAt(selectedRow, 0);
 
-            Patient patient = hospital.findPatientById(patientId);
+            Patient patient =
+                    hospital.findPatientById(patientId);
 
             if (patient == null) {
                 JOptionPane.showMessageDialog(
@@ -113,12 +120,7 @@ public class PatientPanel extends JPanel {
                 return;
             }
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    createPatientInfo(patient),
-                    "Patient Information",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            contentPanel.showPatientDetail(patient);
         });
 
         buttonPanel.add(viewBtn);

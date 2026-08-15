@@ -315,7 +315,7 @@ public class HospitalSystem {
 
     public MedicalService findMedicalServicebyName(String name){
         for (MedicalService ms: medicalServices){
-            if (ms.equals(name)){
+            if (ms.getName().equals(name)){
                 return ms;
             }
         }

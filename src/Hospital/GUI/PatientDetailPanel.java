@@ -1,10 +1,36 @@
 package Hospital.GUI;
 
+import Hospital.Core.HospitalSystem;
+import Hospital.Core.Patient;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class PatientDetailPanel extends JPanel {
-    public PatientDetailPanel(){
+
+    private final HospitalSystem hospital;
+    private final ContentPanel contentPanel;
+
+    private JLabel nameLabel;
+    private JLabel ageLabel;
+    private JLabel genderLabel;
+    private JLabel phoneLabel;
+    private JLabel wardLabel;
+
+    private final MedicalRecordPanel medicalRecordPanel;
+    private final BillPanel billPanel;
+    private final AppointmentsPanel appointmentsPanel;
+
+    private Patient patient;
+
+    public PatientDetailPanel(HospitalSystem hospital, ContentPanel contentPanel) {
+        this.hospital = hospital;
+        this.contentPanel = contentPanel;
+
+        medicalRecordPanel = new MedicalRecordPanel();
+        billPanel = new BillPanel();
+        appointmentsPanel = new AppointmentsPanel();
+
 
         setLayout(new BorderLayout());
 
@@ -12,6 +38,10 @@ public class PatientDetailPanel extends JPanel {
         // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
         JButton backtoBtn = new JButton("<- Patients");
+        backtoBtn.addActionListener(e ->
+            contentPanel.showPatients()
+        );
+
         JLabel patientID = new JLabel("Patient #10");
 
         headerPanel.add(backtoBtn, BorderLayout.WEST);
@@ -69,5 +99,29 @@ public class PatientDetailPanel extends JPanel {
 
         // Footer
 
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+
+        updatePatientInformation();
+    }
+
+    private void updatePatientInformation() {
+
+        if (patient == null) {
+            return;
+        }
+
+        nameLabel.setText(patient.getName());
+        ageLabel.setText(String.valueOf(patient.getAge()));
+        genderLabel.setText(patient.getGender().toString());
+        phoneLabel.setText(patient.getPhoneNumber());
+
+        if (patient.getWard() != null) {
+            wardLabel.setText(patient.getWard().getName());
+        } else {
+            wardLabel.setText("None");
+        }
     }
 }
