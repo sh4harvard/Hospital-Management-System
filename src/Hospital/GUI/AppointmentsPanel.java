@@ -20,14 +20,6 @@ public class AppointmentsPanel extends JPanel {
 
 
 
-        String[] titles = {
-            "Date", "Time", "Doctor", "Status"
-        };
-
-        Object[][] data = {
-                {"12 Mar 2026", "10:00", "Dr. Ali", "Scheduled"},
-                {"15 Nov 2026", "14:00", "Dr. Ahmad", "Completed"}
-        };
 
         JTable appointmentsTable = new JTable(data, titles);
         JScrollPane scrollPane = new JScrollPane(appointmentsTable);

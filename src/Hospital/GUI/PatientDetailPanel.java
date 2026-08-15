@@ -56,8 +56,7 @@ public class PatientDetailPanel extends JPanel {
         JPanel basicINFO = new JPanel(new BorderLayout());
 
         JPanel patientIdentity = new JPanel(new GridLayout(0, 1));
-        JLabel namePatient = new JLabel("'Patient ICON' Ali Mohammdi");
-        JLabel idPatient = new JLabel("Patient ID: 10");
+
         patientIdentity.add(namePatient);
         patientIdentity.add(idPatient);
 
@@ -71,14 +70,7 @@ public class PatientDetailPanel extends JPanel {
         patientINFO.add(personalInfo, BorderLayout.NORTH);
 
         JPanel infoTable = new JPanel(new GridLayout(2, 4));
-        infoTable.add(new JLabel("Age:"));
-        infoTable.add(new JLabel("24"));
-        infoTable.add(new JLabel("Phone:"));
-        infoTable.add(new JLabel("09124837294"));
-        infoTable.add(new JLabel("Gender:"));
-        infoTable.add(new JLabel("Male"));
-        infoTable.add(new JLabel("Ward:"));
-        infoTable.add(new JLabel("Emergency"));
+
         patientINFO.add(infoTable, BorderLayout.CENTER);
 
         basicINFO.add(patientINFO, BorderLayout.CENTER);
