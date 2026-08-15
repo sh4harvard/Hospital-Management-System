@@ -337,8 +337,8 @@ public class HospitalSystem {
 
     public WardBonus findWardBonusByWardId(int id){
         for (HospitalIncome income: hospitalIncomes){
-            if (income.getType().equals("WARD_BONUS") && income.getIncomeProperty() == id{
-                return income;
+            if (income.getType().equals("WARD_BONUS") && income.getIncomeProperty() == id){
+                return (WardBonus) income;
             }
         }
 

@@ -95,11 +95,11 @@ public class DatabaseInitializer {
             statement.executeUpdate(
             "CREATE TABLE IF NOT EXISTS hospital_income (" +
                     "id INTEGER PRIMARY KEY, " +
-                    "income_type TEXT NOT NULL" +
-                    "income_id_prop INTEGER NOT NULL" +
+                    "income_type TEXT NOT NULL," +
+                    "income_id_prop INTEGER NOT NULL," +
                     "name TEXT NOT NULL, " +
-                    "amount REAL NOT NULL" +
-                    "income_date TEXT NOT NULL, " +
+                    "amount REAL NOT NULL," +
+                    "income_date TEXT NOT NULL" +
                     ")"
             );
 

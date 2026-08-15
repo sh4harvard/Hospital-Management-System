@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class ContentPanel extends JPanel {
     private CardLayout cardLayout;
-    private HospitalSystem hospital;
+    private final HospitalSystem hospital;
 
     public ContentPanel(HospitalSystem hospital){
 
@@ -17,7 +17,7 @@ public class ContentPanel extends JPanel {
         setLayout(cardLayout);
 
         add(new HospitalPanel(), "HOSPITAL");
-        add(new PatientPanel(), "PATIENTS");
+        add(new PatientPanel(hospital), "PATIENTS");
         add(new DoctorPanel(), "DOCTORS");
         add(new HAppointmentsPanel(), "APPOINTMENTS");
     }

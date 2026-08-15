@@ -1,3 +1,4 @@
+import Database.DatabaseInitializer;
 import Database.DatabaseLoader;
 import Hospital.Core.HospitalSystem;
 import Hospital.GUI.MainFrame;
@@ -9,6 +10,7 @@ public class Main {
     public static void main(String[] args) {
 
         HospitalSystem hospital = new HospitalSystem();
+        DatabaseInitializer.initialize();
 
         try {
             DatabaseLoader loader = new DatabaseLoader(hospital);
