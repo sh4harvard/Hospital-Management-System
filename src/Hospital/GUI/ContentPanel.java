@@ -56,7 +56,7 @@ public class ContentPanel extends JPanel {
         add(doctorEditPanel, "DOCTOR_EDIT");
 
 
-        add(new HospitalPanel(hospital, this), "HOSPITAL");
+        add(new HospitalPanel(), "HOSPITAL");
 
         appointmentPanel = new HAppointmentsPanel(hospital, this);
         add(appointmentPanel, "APPOINTMENTS");

@@ -187,7 +187,7 @@ public class AppointmentAddPanel extends JPanel {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Appointment could not be created."
+                    hospital.getLastAppointmentError()
             );
 
             return;
