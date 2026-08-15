@@ -48,11 +48,19 @@ public class MainFrame extends JFrame{
 
                     System.out.println("Database saved successfully.");
 
+                    dispose();
+
                 } catch (SQLException ex) {
                     ex.printStackTrace();
-                }
 
-                dispose();
+                    JOptionPane.showMessageDialog(
+                            MainFrame.this,
+                            "Could not save the database.\n" +
+                                    "The application will remain open.",
+                            "Database Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
             }
         });
     }

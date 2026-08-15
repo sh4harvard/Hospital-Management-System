@@ -1,94 +1,296 @@
 package Hospital.GUI;
 
-import com.sun.deploy.panel.JavaPanel;
+import Hospital.Core.Doctor;
+import Hospital.Core.HospitalSystem;
+import Hospital.Core.Ward;
+import Hospital.Core.enums.Gender;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
-public class DoctorAddPanel extends JavaPanel {
-    public DoctorAddPanel(){
+public class DoctorAddPanel extends JPanel {
+
+    private final HospitalSystem hospital;
+    private final ContentPanel contentPanel;
+
+    private JTextField nameField;
+    private JTextField ageField;
+    private JComboBox<Gender> genderBox;
+    private JTextField phoneField;
+
+    private JTextField specialtyField;
+    private JComboBox<Ward> wardBox;
+    private JTextField shiftStartField;
+    private JTextField shiftEndField;
+    private JTextField capacityField;
+
+    public DoctorAddPanel(HospitalSystem hospital, ContentPanel contentPanel) {
+
+        this.hospital = hospital;
+        this.contentPanel = contentPanel;
 
         setLayout(new BorderLayout());
 
-        //
-
+        // header
         JLabel title = new JLabel("Add Doctor");
         title.setFont(new Font("Arial", Font.BOLD, 24));
         add(title, BorderLayout.NORTH);
 
-        //
-
+        // Main
         JPanel addFormPanel = new JPanel(new GridLayout(2, 1, 10, 10));
 
-        //
-
-
+        // Personal Information
         JPanel personalPanel = new JPanel(new BorderLayout());
-        personalPanel.add(new JLabel("Personal Information"), BorderLayout.NORTH);
+        personalPanel.add(
+                new JLabel("Personal Information"),
+                BorderLayout.NORTH
+        );
 
-        JPanel personalFormPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel personalFormPanel =
+                new JPanel(new GridLayout(4, 2, 10, 10));
 
         personalFormPanel.add(new JLabel("Name:"));
-        personalFormPanel.add(new JTextField());
+
+        nameField = new JTextField();
+        personalFormPanel.add(nameField);
 
         personalFormPanel.add(new JLabel("Age:"));
-        personalFormPanel.add(new JTextField());
+
+        ageField = new JTextField();
+        personalFormPanel.add(ageField);
 
         personalFormPanel.add(new JLabel("Gender:"));
-        String[] genders = {"Male", "Female"};
-        personalFormPanel.add(new JComboBox<>(genders));
+
+        genderBox = new JComboBox<>(Gender.values());
+        personalFormPanel.add(genderBox);
 
         personalFormPanel.add(new JLabel("Phone:"));
-        personalFormPanel.add(new JTextField());
 
-        personalPanel.add(personalFormPanel, BorderLayout.CENTER);
+        phoneField = new JTextField();
+        personalFormPanel.add(phoneField);
+
+        personalPanel.add(
+                personalFormPanel,
+                BorderLayout.CENTER
+        );
+
         addFormPanel.add(personalPanel);
-        //
 
+        // Professional Information
         JPanel professionalPanel = new JPanel(new BorderLayout());
-        professionalPanel.add(new JLabel("Professional Information"), BorderLayout.NORTH);
 
-        JPanel professionalFormPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+        professionalPanel.add(
+                new JLabel("Professional Information"),
+                BorderLayout.NORTH
+        );
 
+        JPanel professionalFormPanel =
+                new JPanel(new GridLayout(5, 2, 10, 10));
 
         professionalFormPanel.add(new JLabel("Specialty:"));
-        professionalFormPanel.add(new JTextField());
+
+        specialtyField = new JTextField();
+        professionalFormPanel.add(specialtyField);
 
         professionalFormPanel.add(new JLabel("Ward:"));
-        String[] wards = {
-                "Cardiology",
-                "Emergency",
-                "Neurology",
-                "General"
-        };
-        professionalFormPanel.add(new JComboBox<>(wards));
+
+        wardBox = new JComboBox<>();
+
+        for (Ward ward : hospital.getWards()) {
+            wardBox.addItem(ward);
+        }
+
+        professionalFormPanel.add(wardBox);
 
         professionalFormPanel.add(new JLabel("Shift Start:"));
-        professionalFormPanel.add(new JTextField());
+
+        shiftStartField = new JTextField();
+        professionalFormPanel.add(shiftStartField);
 
         professionalFormPanel.add(new JLabel("Shift End:"));
-        professionalFormPanel.add(new JTextField());
+
+        shiftEndField = new JTextField();
+        professionalFormPanel.add(shiftEndField);
 
         professionalFormPanel.add(new JLabel("Capacity:"));
-        professionalFormPanel.add(new JTextField());
 
+        capacityField = new JTextField();
+        professionalFormPanel.add(capacityField);
 
-        professionalPanel.add(professionalFormPanel, BorderLayout.CENTER);
+        professionalPanel.add(
+                professionalFormPanel,
+                BorderLayout.CENTER
+        );
+
         addFormPanel.add(professionalPanel);
-
-        //
 
         add(addFormPanel, BorderLayout.CENTER);
 
-        //
-
-        JPanel footerBtns = new JPanel(new FlowLayout((FlowLayout.RIGHT)));
+        // footer
+        JPanel footerBtns =
+                new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         JButton cancelBtn = new JButton("Cancel");
-        JButton saveBtn = new JButton("Add Doctor");
+        JButton addDoctorBtn = new JButton("Add Doctor");
+
         footerBtns.add(cancelBtn);
-        footerBtns.add(saveBtn);
+        footerBtns.add(addDoctorBtn);
 
         add(footerBtns, BorderLayout.SOUTH);
+
+
+        cancelBtn.addActionListener(e ->
+                contentPanel.showDoctors()
+        );
+
+        addDoctorBtn.addActionListener(e ->
+                addDoctor()
+        );
+    }
+
+    private void addDoctor() {
+
+        try {
+
+            String name = nameField.getText().trim();
+            int age = Integer.parseInt(ageField.getText().trim());
+            String phone = phoneField.getText().trim();
+
+            String specialty =
+                    specialtyField.getText().trim();
+
+            int capacity =
+                    Integer.parseInt(
+                            capacityField.getText().trim()
+                    );
+
+            LocalTime shiftStart =
+                    LocalTime.parse(
+                            shiftStartField.getText().trim()
+                    );
+
+            LocalTime shiftEnd =
+                    LocalTime.parse(
+                            shiftEndField.getText().trim()
+                    );
+
+            Gender gender =
+                    (Gender) genderBox.getSelectedItem();
+
+            Ward ward =
+                    (Ward) wardBox.getSelectedItem();
+
+
+            if (name.isEmpty()
+                    || phone.isEmpty()
+                    || specialty.isEmpty()) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Please fill in all required fields."
+                );
+
+                return;
+            }
+
+            if (age <= 0) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Age must be greater than zero."
+                );
+
+                return;
+            }
+
+            if (capacity <= 0) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Capacity must be greater than zero."
+                );
+
+                return;
+            }
+
+            if (!shiftStart.isBefore(shiftEnd)) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Shift start must be before shift end."
+                );
+
+                return;
+            }
+
+
+            int id = hospital.generateDoctorId();
+
+            // Create Doctor
+            Doctor doctor = new Doctor(
+                    id,
+                    name,
+                    age,
+                    gender,
+                    phone,
+                    specialty,
+                    null,
+                    capacity,
+                    shiftStart,
+                    shiftEnd
+            );
+
+
+            hospital.addDoctor(doctor);
+
+            if (ward != null) {
+                ward.addDoctor(doctor);
+            }
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Doctor added successfully."
+            );
+
+            clearFields();
+
+            contentPanel.showDoctors();
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Age and capacity must be valid numbers."
+            );
+
+        } catch (DateTimeParseException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please enter time in HH:mm format."
+            );
+        }
+    }
+
+    public void clearFields() {
+
+        nameField.setText("");
+        ageField.setText("");
+        phoneField.setText("");
+
+        specialtyField.setText("");
+        shiftStartField.setText("");
+        shiftEndField.setText("");
+        capacityField.setText("");
+
+        genderBox.setSelectedIndex(0);
+
+        wardBox.removeAllItems();
+
+        for (Ward ward : hospital.getWards()) {
+            wardBox.addItem(ward);
+        }
     }
 }

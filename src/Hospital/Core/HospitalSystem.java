@@ -24,6 +24,8 @@ public class HospitalSystem {
     private int nextChargeId = 1;
     private int nextAppointmentId = 1;
 
+    private String lastAppointmentError;
+
 
     public HospitalSystem(){
         patients = new ArrayList<>();
@@ -175,16 +177,35 @@ public class HospitalSystem {
         return false;
     }
 
-    public void dischargePatient(Patient patient){
-        Ward pw = patient.getWard();
-        if (pw != null) {
-            if (pw.getPatients().size() == 1) {
-                System.out.println("Successfully Ward empty");
-                findWardById(pw.getId());
-                hospitalIncomes.add(new WardBonus(pw));
+    public void dischargePatient(Patient patient) {
+
+        Ward ward = patient.getWard();
+
+        if (ward != null) {
+
+            ward.removePatient(patient);
+
+            if (ward.getPatients().isEmpty()) {
+                hospitalIncomes.add(new WardBonus(ward));
             }
-            pw.removePatient(patient);
         }
+    }
+
+    public void deletePatient(Patient patient) {
+
+
+        if (patient.getWard() != null) {
+            dischargePatient(patient);
+        }
+
+        ArrayList<Appointment> patientAppointments =
+                new ArrayList<>(patient.getAppointments());
+
+        for (Appointment appointment : patientAppointments) {
+            cancelAppointment(appointment);
+        }
+
+        patients.remove(patient);
     }
 
 
@@ -205,10 +226,24 @@ public class HospitalSystem {
         doctors.add(doctor);
     }
 
-    public void removeDoctor(Doctor doctor){
+    public void removeDoctor(Doctor doctor) {
+
+        // Remove  doctor ward
+        if (doctor.getWard() != null) {
+            doctor.getWard().removeDoctor(doctor);
+        }
+
+        // Remove appointments
+        ArrayList<Appointment> doctorAppointments =
+                new ArrayList<>(doctor.getAppointments());
+
+        for (Appointment appointment : doctorAppointments) {
+            cancelAppointment(appointment);
+        }
+
+        // Remove doctor from hospital
         doctors.remove(doctor);
     }
-
     //findDoctorById(String id)
 
 
@@ -238,52 +273,148 @@ public class HospitalSystem {
         return null;
     }
 
-    public void transferWardPatient(Patient patient, Ward newWard){
-        dischargePatient(patient);
-        patient.setWard(newWard);
+    public boolean transferWardPatient(Patient patient, Ward newWard) {
+
+        if (patient.getWard() == newWard) {
+            return true;
+        }
+
+        if (newWard != null &&
+                newWard.getPatients().size() >= newWard.getCapacity()) {
+            return false;
+        }
+
+        Ward oldWard = patient.getWard();
+
+        if (oldWard != null) {
+            oldWard.removePatient(patient);
+
+            if (oldWard.getPatients().isEmpty()
+                    && findWardBonusByWardId(oldWard.getId()) == null) {
+
+                hospitalIncomes.add(new WardBonus(oldWard));
+            }
+        }
+
+        if (newWard != null) {
+            newWard.addPatient(patient);
+        }
+
+        return true;
     }
 
-    public void transferWardDoctor(Doctor doctor, Ward newWard){
-        if (doctor.getWard() != null){
-            doctor.getWard().removeDoctor(doctor);
+    public boolean transferWardDoctor(Doctor doctor, Ward newWard) {
+
+        if (doctor.getWard() == newWard) {
+            return true;
         }
-        doctor.setWard(newWard);
+
+        Ward oldWard = doctor.getWard();
+
+        if (oldWard != null) {
+            oldWard.removeDoctor(doctor);
+
+            if (oldWard.getDoctors().isEmpty()
+                    && findWardBonusByWardId(oldWard.getId()) == null) {
+
+                hospitalIncomes.add(new WardBonus(oldWard));
+            }
+        }
+
+        if (newWard != null) {
+            newWard.addDoctor(doctor);
+        }
+
+        return true;
     }
 
     // Appointment Section
 
     public ArrayList<Appointment> getAppointments() {return appointments;}
 
-    public Appointment createAppointment(int id, Patient patient, Doctor doctor, LocalDate date, LocalTime time){
-        if (patient.getWard() == null || patient.getWard() == doctor.getWard()){
-            if (doctor.hasAvailableCapacity(date)){
-                if (doctor.isAvailableWithinShift(time)){
-                    if (doctor.isAppointmentAvailable(date, time)){
-                        Appointment appointment = new Appointment(id, patient, doctor, date, time);
-                        appointments.add(appointment);
-                        Collections.sort(appointments);
+    public Appointment createAppointment(
+            int id,
+            Patient patient,
+            Doctor doctor,
+            LocalDate date,
+            LocalTime time) {
 
-                        doctor.addAppointment(appointment);
-                        Collections.sort(doctor.getAppointments());
+        lastAppointmentError = null;
 
-                        patient.addAppointment(appointment);
-                        Collections.sort(patient.getAppointments());
+        if (patient.getWard() != null
+                && patient.getWard() != doctor.getWard()) {
 
-                        hospitalIncomes.add(new IncomeMedicalService(findMedicalServicebyId(1), patient));
-                        patient.getBill().addCharge(new Charge(generateChargeId(), findMedicalServicebyId(1), LocalDate.now()));
-                        return appointment;
-                    }
-                    System.out.println("Appointment is full at time, date");
-                    return null;
-                }
-                System.out.println("Out of doctors shift");
-                return null;
-            }
-            System.out.println("Doctor is full");
+            lastAppointmentError =
+                    "Doctor isn't in the patient's ward.";
+
             return null;
         }
-        System.out.println("Doctor isn't in this ward");
-        return null;
+
+        if (!doctor.hasAvailableCapacity(date)) {
+
+            lastAppointmentError =
+                    "Doctor is full on this date.";
+
+            return null;
+        }
+
+        if (!doctor.isAvailableWithinShift(time)) {
+
+            lastAppointmentError =
+                    "The selected time is outside the doctor's shift.";
+
+            return null;
+        }
+
+        if (!doctor.isAppointmentAvailable(date, time)) {
+
+            lastAppointmentError =
+                    "The doctor already has an appointment at this time.";
+
+            return null;
+        }
+
+        Appointment appointment =
+                new Appointment(
+                        id,
+                        patient,
+                        doctor,
+                        date,
+                        time
+                );
+
+        appointments.add(appointment);
+
+        Collections.sort(appointments);
+
+        doctor.addAppointment(appointment);
+
+        Collections.sort(
+                doctor.getAppointments()
+        );
+
+        patient.addAppointment(appointment);
+
+        Collections.sort(
+                patient.getAppointments()
+        );
+
+        hospitalIncomes.add(
+                new IncomeMedicalService(
+                        findMedicalServicebyId(1),
+                        patient
+                )
+        );
+
+        patient.getBill().addCharge(
+                new Charge(
+                        generateChargeId(),
+                        findMedicalServicebyId(1),
+                        LocalDate.now()
+                )
+        );
+
+        return appointment;
     }
 
     public void closeAppointment(Appointment appointment){
@@ -343,6 +474,10 @@ public class HospitalSystem {
         }
 
         return null;
+    }
+
+    public String getLastAppointmentError() {
+        return lastAppointmentError;
     }
 }
 

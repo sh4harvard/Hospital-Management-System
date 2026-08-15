@@ -163,7 +163,14 @@ public class DatabaseLoader {
                 String diagnosis = resultSet.getString("diagnosis");
                 String prescription = resultSet.getString("prescription");
                 String notes = resultSet.getString("notes");
-                LocalDate lastDate = LocalDate.parse(resultSet.getString("last_diagnose_date"));
+                String dateText =
+                        resultSet.getString("last_diagnose_date");
+
+                LocalDate lastDate = null;
+
+                if (dateText != null) {
+                    lastDate = LocalDate.parse(dateText);
+                }
 
                 Patient patient = hospital.findPatientById(id);
 

@@ -5,6 +5,7 @@ import Hospital.Core.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 
 public class DatabaseSaver {
 
@@ -191,7 +192,18 @@ public class DatabaseSaver {
                 statement.setString(2, record.getDiagnosis());
                 statement.setString(3, record.getPrescription());
                 statement.setString(4, record.getNotes());
-                statement.setString(5, record.getLastDiagnoseDate().toString());
+
+                if (record.getLastDiagnoseDate() != null) {
+                    statement.setString(
+                            5,
+                            record.getLastDiagnoseDate().toString()
+                    );
+                } else {
+                    statement.setNull(
+                            5,
+                            Types.VARCHAR
+                    );
+                }
 
                 statement.executeUpdate();
             }

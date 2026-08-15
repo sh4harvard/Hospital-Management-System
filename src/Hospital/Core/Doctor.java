@@ -116,4 +116,9 @@ public class Doctor extends Person implements DisplayInformation{
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return getId() + " - Dr. " + getName();
+    }
 }

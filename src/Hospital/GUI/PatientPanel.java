@@ -19,7 +19,7 @@ public class PatientPanel extends JPanel {
     private final String[] tableTitles = {"ID", "Name", "Age", "Gender", "Phone", "Ward"};
     private final int tableCol = tableTitles.length;
 
-    public PatientPanel(HospitalSystem hospital, ContentPanel contentPanel){
+    public PatientPanel(HospitalSystem hospital, ContentPanel contentPanel) {
         this.hospital = hospital;
         this.contentPanel = contentPanel;
 
@@ -80,7 +80,6 @@ public class PatientPanel extends JPanel {
         add(headerPanel, BorderLayout.NORTH);
 
         // Center
-        tablePatients = new JTable();
 
         tableModel = new DefaultTableModel(
                 new String[]{
@@ -98,11 +97,8 @@ public class PatientPanel extends JPanel {
 
         refreshTable();
 
-        refreshPatientTable();
-
-        JScrollPane scrollPane = new JScrollPane(tablePatients);
-
-        add(scrollPane, BorderLayout.CENTER);
+        JScrollPane scrollTable = new JScrollPane(tablePatients);
+        add(scrollTable, BorderLayout.CENTER);
 
 
         // Footer
@@ -110,6 +106,7 @@ public class PatientPanel extends JPanel {
         JButton viewBtn = new JButton("View Patient");
         JButton editBtn = new JButton("Edit");
         JButton deleteBtn = new JButton("Delete");
+        deleteBtn.addActionListener(e -> deleteSelectedPatient());
 
         // View Button Func
         viewBtn.addActionListener(e -> {
@@ -149,7 +146,7 @@ public class PatientPanel extends JPanel {
 
     }
 
-    private void refreshPatientTable(){
+    private void refreshPatientTable() {
         refreshPatientTable(hospital.getPatients());
     }
 
@@ -179,6 +176,10 @@ public class PatientPanel extends JPanel {
 
     public void refreshTable() {
 
+        System.out.println("PatientPanel.refreshTable()");
+        System.out.println("Patients: " +
+                hospital.getPatients().size());
+
         tableModel.setRowCount(0);
 
         for (Patient patient : hospital.getPatients()) {
@@ -196,5 +197,55 @@ public class PatientPanel extends JPanel {
 
             tableModel.addRow(row);
         }
+
+        System.out.println("Rows in model: " +
+                tableModel.getRowCount());
+    }
+
+    private void deleteSelectedPatient() {
+
+        int selectedRow = tablePatients.getSelectedRow();
+
+        if (selectedRow == -1) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a patient first."
+            );
+
+            return;
+        }
+
+        int patientId =
+                (int) tablePatients.getValueAt(selectedRow, 0);
+
+        Patient patient =
+                hospital.findPatientById(patientId);
+
+        if (patient == null) {
+            return;
+        }
+
+        int result = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to delete " +
+                        patient.getName() + "?",
+                "Delete Patient",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (result != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        hospital.deletePatient(patient);
+
+        refreshTable();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Patient deleted successfully."
+        );
     }
 }

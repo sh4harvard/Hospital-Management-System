@@ -67,4 +67,9 @@ public class Patient extends Person implements DisplayInformation{
     public void removeAppointment(Appointment appointment) {
         appointments.remove(appointment);
     }
+
+    @Override
+    public String toString() {
+        return getId() + " - " + getName();
+    }
 }
