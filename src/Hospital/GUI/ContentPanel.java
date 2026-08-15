@@ -62,4 +62,19 @@ public class ContentPanel extends JPanel {
         patientEditPanel.setPatient(patient);
         showPanel("PATIENT_EDIT");
     }
+
+    public void clearFields() {
+
+        nameField.setText("");
+        ageField.setText("");
+        phoneField.setText("");
+
+        genderBox.setSelectedIndex(0);
+
+        wardBox.removeAllItems();
+
+        for (Ward ward : hospital.getWards()) {
+            wardBox.addItem(ward);
+        }
+    }
 }

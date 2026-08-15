@@ -71,6 +71,10 @@ public class Ward implements DisplayInformation{
         doctor.setWard(null);
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 
     public String showInfo(){
         return "===== Ward (" + name + ") Information =====" +
