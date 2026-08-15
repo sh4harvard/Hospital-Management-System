@@ -22,25 +22,38 @@ public class BillPanel extends JPanel{
         setLayout(new BorderLayout());
 
 
+        totalLabel = new JLabel("0");
+        paidLabel = new JLabel("0");
+        remainingLabel = new JLabel("0");
+
+
         JLabel title = new JLabel("Bill");
         title.setFont(new Font("Arial", Font.BOLD, 20));
         add(title, BorderLayout.NORTH);
 
+        String[] titles = {
+                "ID",
+                "Service",
+                "Cost",
+                "Status",
+                "Date"
+        };
 
+        tableModel = new DefaultTableModel(titles, 0);
+        chargesTable = new JTable(tableModel);
 
-
-        JTable billTable = new JTable(data, titles);
-        JScrollPane scrollPane = new JScrollPane(billTable);
+        JScrollPane scrollPane = new JScrollPane(chargesTable);
         add(scrollPane, BorderLayout.CENTER);
 
 
 
         JPanel summaryPanel = new JPanel(new GridLayout(3, 2));
         summaryPanel.add(new JLabel("Total:"));
-
+        summaryPanel.add(totalLabel);
         summaryPanel.add(new JLabel("Paid:"));
-
+        summaryPanel.add(paidLabel);
         summaryPanel.add(new JLabel("Remaining:"));
+        summaryPanel.add(remainingLabel);
         add(summaryPanel, BorderLayout.SOUTH);
     }
 

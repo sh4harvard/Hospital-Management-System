@@ -11,7 +11,9 @@ public class PatientDetailPanel extends JPanel {
     private final HospitalSystem hospital;
     private final ContentPanel contentPanel;
 
-    private JLabel nameLabel;
+    private JLabel namePatient;
+    private JLabel idPatient;
+    private JLabel patientID;
     private JLabel ageLabel;
     private JLabel genderLabel;
     private JLabel phoneLabel;
@@ -26,6 +28,14 @@ public class PatientDetailPanel extends JPanel {
     public PatientDetailPanel(HospitalSystem hospital, ContentPanel contentPanel) {
         this.hospital = hospital;
         this.contentPanel = contentPanel;
+
+        patientID = new JLabel();
+        namePatient = new JLabel();
+        idPatient = new JLabel();
+        ageLabel = new JLabel();
+        phoneLabel = new JLabel();
+        genderLabel = new JLabel();
+        wardLabel = new JLabel();
 
         medicalRecordPanel = new MedicalRecordPanel();
         billPanel = new BillPanel();
@@ -71,6 +81,18 @@ public class PatientDetailPanel extends JPanel {
 
         JPanel infoTable = new JPanel(new GridLayout(2, 4));
 
+        infoTable.add(new JLabel("Age:"));
+        infoTable.add(ageLabel);
+
+        infoTable.add(new JLabel("Phone:"));
+        infoTable.add(phoneLabel);
+
+        infoTable.add(new JLabel("Gender:"));
+        infoTable.add(genderLabel);
+
+        infoTable.add(new JLabel("Ward:"));
+        infoTable.add(wardLabel);
+
         patientINFO.add(infoTable, BorderLayout.CENTER);
 
         basicINFO.add(patientINFO, BorderLayout.CENTER);
@@ -82,6 +104,13 @@ public class PatientDetailPanel extends JPanel {
         JPanel detailINFO = new JPanel();
 
         JTabbedPane infotabs = new JTabbedPane();
+
+        detailINFO.setLayout(new BorderLayout());
+        detailINFO.add(infotabs, BorderLayout.CENTER);
+
+        patientDisplayINFO.add(detailINFO, BorderLayout.CENTER);
+
+        add(patientDisplayINFO, BorderLayout.CENTER);
 
 
         infotabs.add("Medical Record", medicalRecordPanel);
@@ -117,7 +146,10 @@ public class PatientDetailPanel extends JPanel {
             return;
         }
 
-        nameLabel.setText(patient.getName());
+        patientID.setText("Patient #" + patient.getId());
+        namePatient.setText(patient.getName());
+        idPatient.setText("Patient ID: " + patient.getId());
+
         ageLabel.setText(String.valueOf(patient.getAge()));
         genderLabel.setText(patient.getGender().toString());
         phoneLabel.setText(patient.getPhoneNumber());

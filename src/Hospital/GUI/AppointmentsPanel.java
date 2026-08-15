@@ -1,13 +1,18 @@
 package Hospital.GUI;
 
+import Hospital.Core.Appointment;
 import Hospital.Core.Patient;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class AppointmentsPanel extends JPanel {
 
     private Patient patient;
+
+    private DefaultTableModel tableModel;
+    private JTable appointmentsTable;
 
     public AppointmentsPanel(){
 
@@ -19,9 +24,17 @@ public class AppointmentsPanel extends JPanel {
         add(title, BorderLayout.NORTH);
 
 
+        String[] titles = {
+                "ID",
+                "Doctor",
+                "Date",
+                "Time",
+                "Status"
+        };
 
+        tableModel = new DefaultTableModel(titles, 0);
+        appointmentsTable = new JTable(tableModel);
 
-        JTable appointmentsTable = new JTable(data, titles);
         JScrollPane scrollPane = new JScrollPane(appointmentsTable);
         add(scrollPane, BorderLayout.CENTER);
 
