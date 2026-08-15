@@ -66,7 +66,7 @@ public class DatabaseSaver {
                 .executeUpdate("DELETE FROM wards");
 
         connection.createStatement()
-                .executeUpdate("DELETE FROM daily_income");
+                .executeUpdate("DELETE FROM hospital_income");
     }
     //
 
@@ -249,6 +249,26 @@ public class DatabaseSaver {
     }
 
     private void saveIncome(Connection connection) throws SQLException {
-        // next
+
+        String sql =
+                "INSERT INTO hospital_income " +
+                        "(income_type, income_id_prop, name, amount, income_date) " +
+                        "VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            for (HospitalIncome income : hospital.getHospitalIncomes()) {
+
+                statement.setString(1, income.getType());
+                statement.setInt(2, income.getIncomeProperty());
+                statement.setString(3, income.getName());
+                statement.setDouble(4, income.getAmount());
+                statement.setString(5, income.getDate().toString());
+
+                statement.executeUpdate();
+
+            }
+        }
     }
 }

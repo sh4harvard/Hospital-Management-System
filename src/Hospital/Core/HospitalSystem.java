@@ -180,6 +180,7 @@ public class HospitalSystem {
         if (pw != null) {
             if (pw.getPatients().size() == 1) {
                 System.out.println("Successfully Ward empty");
+                findWardById(pw.getId());
                 hospitalIncomes.add(new WardBonus(pw));
             }
             pw.removePatient(patient);
@@ -312,6 +313,15 @@ public class HospitalSystem {
         return null;
     }
 
+    public MedicalService findMedicalServicebyName(String name){
+        for (MedicalService ms: medicalServices){
+            if (ms.equals(name)){
+                return ms;
+            }
+        }
+        return null;
+    }
+
     // Budget
 
     public ArrayList<HospitalIncome> getHospitalIncomes() {return hospitalIncomes;}
@@ -323,6 +333,16 @@ public class HospitalSystem {
         }
 
         return budget;
+    }
+
+    public WardBonus findWardBonusByWardId(int id){
+        for (HospitalIncome income: hospitalIncomes){
+            if (income.getType().equals("WARD_BONUS") && income.getIncomeProperty() == id{
+                return income;
+            }
+        }
+
+        return null;
     }
 }
 

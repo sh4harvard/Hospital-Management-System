@@ -251,6 +251,38 @@ public class DatabaseLoader {
     }
 
     private void loadIncome(Connection connection) throws SQLException {
-        // next
+        String sql = "SELECT id, income_type, income_id_prop, name, amount, income_date " +
+                "FROM hospital_income";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                int id = resultSet.getInt("id");
+                String type = resultSet.getString("income_type");
+                int propID = resultSet.getInt("income_id_prop");
+                String name = resultSet.getString("name");
+                double amount = resultSet.getDouble("amount");
+                LocalDate date = LocalDate.parse(resultSet.getString("income_date"));
+
+                if (type.equals("MEDICAL_SERVICE")) {
+                    MedicalService medicalService = hospital.findMedicalServicebyName(name);
+                    Patient patient = hospital.findPatientById(propID);
+                    HospitalIncome income = new IncomeMedicalService(medicalService, patient);
+                    income.setAmount(amount);
+                    income.setDate(date);
+                    hospital.getHospitalIncomes().add(income);
+                }
+                else if (type.equals("WARD_BONUS")) {
+                    Ward ward = hospital.findWardById(propID);
+                    HospitalIncome wardBonus = new WardBonus(ward);
+                    wardBonus.setAmount(amount);
+                    wardBonus.setDate(date);
+                    hospital.getHospitalIncomes().add(wardBonus);
+                }
+
+            }
+        }
     }
 }

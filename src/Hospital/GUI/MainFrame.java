@@ -28,7 +28,7 @@ public class MainFrame extends JFrame{
         add(new TitlePanel(), BorderLayout.NORTH);
 
 
-        ContentPanel contentPanel = new ContentPanel();
+        ContentPanel contentPanel = new ContentPanel(hospital);
 
         add(new MenuPanel(contentPanel), BorderLayout.WEST);
 

@@ -1,12 +1,16 @@
 package Hospital.Core;
 
+import java.time.LocalDate;
+
 public class WardBonus implements HospitalIncome{
     private Ward ward;
     private double amount;
+    private LocalDate date;
 
     public WardBonus(Ward ward) {
         this.ward = ward;
-        this.amount = 500;
+        amount = 500; // PDF
+        date = LocalDate.now();
     }
 
     public Ward getWard() {
@@ -17,10 +21,15 @@ public class WardBonus implements HospitalIncome{
         this.amount = amount;
     }
 
+    public void setDate(LocalDate date){this.date = date;}
+
+
     @Override
-    public double getAmount() {
-        return amount;
-    }
+    public String getType(){return "WARD_BONUS";};
+    public int getIncomeProperty(){return ward.getId();};
+    public String getName(){return ward.getName()+" Bonus";};
+    public double getAmount(){return amount;};
+    public LocalDate getDate(){return date;};
 
     @Override
     public String showInfo() {
