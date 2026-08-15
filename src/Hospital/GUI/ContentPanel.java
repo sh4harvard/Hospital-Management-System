@@ -34,7 +34,6 @@ public class ContentPanel extends JPanel {
         add(patientEditPanel, "PATIENT_EDIT");
 
         add(new HospitalPanel(), "HOSPITAL");
-        add(new PatientPanel(hospital), "PATIENTS");
         add(new DoctorPanel(), "DOCTORS");
         add(new HAppointmentsPanel(), "APPOINTMENTS");
     }
