@@ -102,9 +102,14 @@ public class PatientDetailPanel extends JPanel {
     }
 
     public void setPatient(Patient patient) {
+
         this.patient = patient;
 
         updatePatientInformation();
+
+        medicalRecordPanel.setPatient(patient);
+        billPanel.setPatient(patient);
+        appointmentsPanel.setPatient(patient);
     }
 
     private void updatePatientInformation() {

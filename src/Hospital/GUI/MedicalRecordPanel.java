@@ -1,12 +1,28 @@
 package Hospital.GUI;
 
+import Hospital.Core.MedicalRecord;
+import Hospital.Core.Patient;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MedicalRecordPanel extends JPanel {
+
+    private Patient patient;
+
+    private JTextArea diagnosisINFO;
+    private JTextArea prescribINFO;
+    private JTextArea noteINFO;
+    private JLabel lastPrescrib;
+
     public MedicalRecordPanel(){
 
         setLayout(new BorderLayout());
+
+        diagnosisINFO = new JTextArea(4, 40);
+        prescribINFO = new JTextArea(4, 40);
+        noteINFO = new JTextArea(4, 40);
+        lastPrescrib = new JLabel();
 
         // Header
         JLabel title = new JLabel("Medical Record");
@@ -73,5 +89,36 @@ public class MedicalRecordPanel extends JPanel {
         medicalPanelFooter.add(editMedicalINFO, BorderLayout.EAST);
 
         add(medicalPanelFooter, BorderLayout.SOUTH);
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+
+        updateMedicalRecord();
+    }
+
+    private void updateMedicalRecord() {
+
+        if (patient == null || patient.getMedicalRecord() == null) {
+            diagnosisINFO.setText("");
+            prescribINFO.setText("");
+            noteINFO.setText("");
+            lastPrescrib.setText("");
+            return;
+        }
+
+        MedicalRecord record = patient.getMedicalRecord();
+
+        diagnosisINFO.setText(record.getDiagnosis());
+        prescribINFO.setText(record.getPrescription());
+        noteINFO.setText(record.getNotes());
+
+        if (record.getLastDiagnoseDate() != null) {
+            lastPrescrib.setText(
+                    record.getLastDiagnoseDate().toString()
+            );
+        } else {
+            lastPrescrib.setText("No diagnosis date");
+        }
     }
 }

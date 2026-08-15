@@ -1,9 +1,14 @@
 package Hospital.GUI;
 
+import Hospital.Core.Patient;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class AppointmentsPanel extends JPanel {
+
+    private Patient patient;
+
     public AppointmentsPanel(){
 
         setLayout(new BorderLayout());
@@ -33,5 +38,30 @@ public class AppointmentsPanel extends JPanel {
         JButton newAppointmentButton = new JButton("New Appointment");
         buttonFooterPanel.add(newAppointmentButton);
         add(buttonFooterPanel, BorderLayout.SOUTH);
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+        updateAppointments();
+    }
+
+    private void updateAppointments() {
+
+        tableModel.setRowCount(0);
+
+        if (patient == null) {
+            return;
+        }
+
+        for (Appointment appointment : patient.getAppointments()) {
+
+            tableModel.addRow(new Object[] {
+                    appointment.getId(),
+                    appointment.getDoctor().getName(),
+                    appointment.getDate(),
+                    appointment.getTime(),
+                    appointment.getApStatus()
+            });
+        }
     }
 }
