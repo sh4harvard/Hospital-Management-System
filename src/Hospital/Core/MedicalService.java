@@ -27,6 +27,10 @@ public class MedicalService implements DisplayInformation{
         this.cost = cost;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String showInfo() {
         return id + "    " + name + "    " + cost;

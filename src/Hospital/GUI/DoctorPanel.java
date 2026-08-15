@@ -4,7 +4,9 @@ import Hospital.Core.Doctor;
 import Hospital.Core.HospitalSystem;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class DoctorPanel extends JPanel {
 
@@ -12,6 +14,7 @@ public class DoctorPanel extends JPanel {
     private final ContentPanel contentPanel;
 
     private JTable tableDoctors;
+    private DefaultTableModel tableModel;
 
     public DoctorPanel(HospitalSystem hospital, ContentPanel contentPanel) {
 
@@ -40,6 +43,32 @@ public class DoctorPanel extends JPanel {
         JTextField searchField = new JTextField(20);
         JButton searchBtn = new JButton("Search");
 
+        searchBtn.addActionListener(e -> {
+
+            String searchText =
+                    searchField.getText().trim().toLowerCase();
+
+            if (searchText.isEmpty()) {
+                refreshDoctorTable();
+                return;
+            }
+
+            ArrayList<Doctor> results = new ArrayList<>();
+
+            for (Doctor doctor : hospital.getDoctors()) {
+
+                // Search Doctor by Name / ID / Specialty
+                if (doctor.getName().toLowerCase().contains(searchText)
+                        || String.valueOf(doctor.getId()).contains(searchText)
+                        || doctor.getSpecialty().toLowerCase().contains(searchText)) {
+
+                    results.add(doctor);
+                }
+            }
+
+            refreshDoctorTable(results);
+        });
+
         searchPanel.add(searchTitle);
         searchPanel.add(searchField);
         searchPanel.add(searchBtn);
@@ -58,10 +87,12 @@ public class DoctorPanel extends JPanel {
                 "Capacity"
         };
 
-        tableDoctors = new JTable(
-                new Object[0][tableTitles.length],
-                tableTitles
+        tableModel = new DefaultTableModel(
+                tableTitles,
+                0
         );
+
+        tableDoctors = new JTable(tableModel);
 
 
         JScrollPane scrollTable = new JScrollPane(tableDoctors);
@@ -192,6 +223,65 @@ public class DoctorPanel extends JPanel {
         );
     }
 
+    private void refreshDoctorTable() {
+        refreshDoctorTable(hospital.getDoctors());
+    }
+
+    private void refreshDoctorTable(ArrayList<Doctor> doctors) {
+
+        String[] tableTitles = {
+                "ID",
+                "Name",
+                "Specialty",
+                "Ward",
+                "Shift",
+                "Capacity"
+        };
+
+        Object[][] tableData =
+                new Object[doctors.size()][6];
+
+        for (int i = 0; i < doctors.size(); i++) {
+
+            Doctor doctor = doctors.get(i);
+
+            tableData[i][0] = doctor.getId();
+            tableData[i][1] = doctor.getName();
+            tableData[i][2] = doctor.getSpecialty();
+
+            if (doctor.getWard() != null) {
+                tableData[i][3] =
+                        doctor.getWard().getName();
+            } else {
+                tableData[i][3] = "None";
+            }
+
+            tableData[i][4] =
+                    doctor.getShiftStart()
+                            + " - "
+                            + doctor.getShiftEnd();
+
+            tableData[i][5] =
+                    doctor.getDailyCapacity();
+        }
+
+        tableDoctors.setModel(
+                new javax.swing.table.DefaultTableModel(
+                        tableData,
+                        tableTitles
+                ) {
+                    @Override
+                    public boolean isCellEditable(
+                            int row,
+                            int column
+                    ) {
+                        return false;
+                    }
+                }
+        );
+    }
+
+
     private Doctor getSelectedDoctor() {
 
         int selectedRow = tableDoctors.getSelectedRow();
@@ -245,4 +335,5 @@ public class DoctorPanel extends JPanel {
                 "Delete functionality will be added next."
         );
     }
+
 }

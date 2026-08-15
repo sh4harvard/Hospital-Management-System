@@ -38,6 +38,9 @@ public class MenuPanel extends JPanel {
         JPanel exitPanel = new JPanel();
 
         JButton exitBtn = new JButton("EXIT");
+        exitBtn.addActionListener(e -> {
+            System.exit(0);
+        });
         exitPanel.add(exitBtn);
 
         add(sectionPanel, BorderLayout.CENTER);

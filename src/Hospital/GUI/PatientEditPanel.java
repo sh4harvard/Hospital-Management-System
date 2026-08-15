@@ -54,11 +54,7 @@ public class PatientEditPanel extends JPanel {
         for (Ward ward : hospital.getWards()) {
             wardBox.addItem(ward);
         }
-        wardBox = new JComboBox<>();
 
-        for (Ward ward : hospital.getWards()) {
-            wardBox.addItem(ward);
-        }
 
         formPanel.add(new JLabel("Name:"));
         formPanel.add(nameField);

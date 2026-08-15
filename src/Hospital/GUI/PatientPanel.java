@@ -138,6 +138,33 @@ public class PatientPanel extends JPanel {
             contentPanel.showPatientDetail(patient);
         });
 
+        editBtn.addActionListener(e -> {
+
+            int selectedRow = tablePatients.getSelectedRow();
+
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Please select a patient first."
+                );
+                return;
+            }
+
+            int patientId = (int) tablePatients.getValueAt(selectedRow, 0);
+
+            Patient patient = hospital.findPatientById(patientId);
+
+            if (patient == null) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Patient not found."
+                );
+                return;
+            }
+
+            contentPanel.showPatientEdit(patient);
+        });
+
         buttonPanel.add(viewBtn);
         buttonPanel.add(editBtn);
         buttonPanel.add(deleteBtn);

@@ -1,10 +1,17 @@
 package Hospital.GUI;
 
+import Hospital.Core.HospitalSystem;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class HospitalPanel extends JPanel{
-    public HospitalPanel(){
+
+    private final HospitalSystem hospital;
+
+
+    public HospitalPanel(HospitalSystem hospital){
+        this.hospital = hospital;
 
         setLayout(new BorderLayout());
 
@@ -60,7 +67,7 @@ public class HospitalPanel extends JPanel{
         JTabbedPane hinfoTabs = new JTabbedPane();
 
         hinfoTabs.add("Wards", new WardPanel());
-        hinfoTabs.add("Medical Services", new MedicalServicePanel());
+        hinfoTabs.add("Medical Services", new MedicalServicePanel(hospital));
         hinfoTabs.add("Billing", new HospitalBillPanel());
 
         mainBody.add(hinfoTabs, BorderLayout.CENTER);

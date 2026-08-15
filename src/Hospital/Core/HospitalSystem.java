@@ -453,6 +453,10 @@ public class HospitalSystem {
         return null;
     }
 
+    public void deleteMedicalService(MedicalService service) {
+        medicalServices.remove(service);
+    }
+
     // Budget
 
     public ArrayList<HospitalIncome> getHospitalIncomes() {return hospitalIncomes;}
