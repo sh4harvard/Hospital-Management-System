@@ -4,11 +4,30 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TitlePanel extends JPanel {
-    public TitlePanel(){
 
-        JLabel title = new JLabel("Welcome to ShMonfared's Hospital MS!", JLabel.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 30));
+    public TitlePanel() {
 
-        add(title);
+        setLayout(new BorderLayout());
+        setBackground(AppColors.WHITE);
+
+        setBorder(
+                BorderFactory.createEmptyBorder(
+                        20, 25, 20, 25
+                )
+        );
+
+        JLabel title =
+                new JLabel(
+                        "Welcome to ShMonfared's Hospital MS!",
+                        JLabel.LEFT
+                );
+
+        title.setFont(AppFonts.PAGE_TITLE);
+
+        title.setForeground(
+                AppColors.DARK_BLUE
+        );
+
+        add(title, BorderLayout.WEST);
     }
 }

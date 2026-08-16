@@ -21,49 +21,98 @@ public class HospitalPanel extends JPanel{
         this.hospital = hospital;
         this.contentPanel = contentPanel;
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 20));
+        setBackground(AppColors.BACKGROUND);
 
+        JPanel headerPanel = new JPanel(new BorderLayout());
 
-        JPanel headerPanel = new JPanel();
+        headerPanel.setBackground(AppColors.BACKGROUND);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 25, 0, 25));
         JLabel title = new JLabel("Hospital Overview");
-        title.setFont(new Font("Arial", Font.BOLD, 28));
-        headerPanel.add(title);
+        UIStyle.styleTitle(title);
+
+        headerPanel.add(title, BorderLayout.WEST);
+
         add(headerPanel, BorderLayout.NORTH);
 
 
-        JPanel mainBody = new JPanel(new BorderLayout());
+        JPanel mainBody = new JPanel(new BorderLayout(0, 20));
+
+        mainBody.setBackground(AppColors.BACKGROUND);
+
+        mainBody.setBorder(BorderFactory.createEmptyBorder(0, 25, 25, 25));
 
         //
 
         JPanel hospitalOverviewPanel = new JPanel(new GridLayout(1, 3, 15, 0));
 
+        hospitalOverviewPanel.setBackground(AppColors.BACKGROUND);
+
+
+        // Patient card
         JPanel patientStat = new JPanel(new GridLayout(2, 1));
+
+        patientStat.setBackground(AppColors.WHITE);
+        patientStat.setBorder(UIStyle.createPanelBorder());
+
         JLabel patientTitle = new JLabel("PATIENTS", JLabel.CENTER);
-        patientTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        patientCount = new JLabel(String.valueOf(hospital.getPatients().size()), JLabel.CENTER);        patientCount.setFont(new Font("Arial", Font.BOLD, 30));
+
+        patientTitle.setFont(AppFonts.NORMAL);
+        patientTitle.setForeground(AppColors.SECONDARY_TEXT);
+
+        patientCount = new JLabel(String.valueOf(hospital.getPatients().size()), JLabel.CENTER);
+
+        patientCount.setFont(AppFonts.LARGE_NUMBER);
+        patientCount.setForeground(AppColors.DARK_BLUE);
+
         patientStat.add(patientTitle);
         patientStat.add(patientCount);
 
         hospitalOverviewPanel.add(patientStat);
 
+
+        // Doctor card
         JPanel doctorStat = new JPanel(new GridLayout(2, 1));
+
+        doctorStat.setBackground(AppColors.WHITE);
+        doctorStat.setBorder(UIStyle.createPanelBorder());
+
         JLabel doctorTitle = new JLabel("DOCTORS", JLabel.CENTER);
-        doctorTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        doctorCount = new JLabel(String.valueOf(hospital.getDoctors().size()), JLabel.CENTER);        doctorCount.setFont(new Font("Arial", Font.BOLD, 30));
+
+        doctorTitle.setFont(AppFonts.NORMAL);
+        doctorTitle.setForeground(AppColors.SECONDARY_TEXT);
+
+        doctorCount = new JLabel(String.valueOf(hospital.getDoctors().size()), JLabel.CENTER);
+
+        doctorCount.setFont(AppFonts.LARGE_NUMBER);
+        doctorCount.setForeground(AppColors.DARK_BLUE);
+
         doctorStat.add(doctorTitle);
         doctorStat.add(doctorCount);
 
         hospitalOverviewPanel.add(doctorStat);
 
+
+        // Ward card
         JPanel wardStat = new JPanel(new GridLayout(2, 1));
-        JLabel wardTitle = new JLabel("Ward", JLabel.CENTER);
-        wardTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        wardCount = new JLabel(String.valueOf(hospital.getWards().size()), JLabel.CENTER);        wardCount.setFont(new Font("Arial", Font.BOLD, 30));
+
+        wardStat.setBackground(AppColors.WHITE);
+        wardStat.setBorder(UIStyle.createPanelBorder());
+
+        JLabel wardTitle = new JLabel("WARDS", JLabel.CENTER);
+
+        wardTitle.setFont(AppFonts.NORMAL);
+        wardTitle.setForeground(AppColors.SECONDARY_TEXT);
+
+        wardCount = new JLabel(String.valueOf(hospital.getWards().size()), JLabel.CENTER);
+
+        wardCount.setFont(AppFonts.LARGE_NUMBER);
+        wardCount.setForeground(AppColors.DARK_BLUE);
+
         wardStat.add(wardTitle);
         wardStat.add(wardCount);
 
         hospitalOverviewPanel.add(wardStat);
-
 
         mainBody.add(hospitalOverviewPanel, BorderLayout.NORTH);
         //
@@ -78,6 +127,8 @@ public class HospitalPanel extends JPanel{
         hinfoTabs.add("Billing", billingPanel);
 
 
+
+        hinfoTabs.setBorder(BorderFactory.createLineBorder(AppColors.BORDER));
 
         mainBody.add(hinfoTabs, BorderLayout.CENTER);
 

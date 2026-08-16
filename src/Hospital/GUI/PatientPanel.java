@@ -23,27 +23,39 @@ public class PatientPanel extends JPanel {
         this.hospital = hospital;
         this.contentPanel = contentPanel;
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 15));
+        setBackground(AppColors.BACKGROUND);
 
         // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(AppColors.BACKGROUND);
 
         JPanel patientsectionPanel = new JPanel(new BorderLayout());
-        JLabel section = new JLabel("Patients");
-        patientsectionPanel.add(section, BorderLayout.WEST);
-        JButton addPatient = new JButton("Add Patient");
+        patientsectionPanel.setBackground(AppColors.BACKGROUND);
 
-        addPatient.addActionListener(e ->
-                contentPanel.showPatientAdd()
-        );
+        JLabel section = new JLabel("Patients");
+        UIStyle.styleTitle(section);
+
+        JButton addPatient = new JButton("Add Patient");
+        UIStyle.styleButton(addPatient);
+
+        addPatient.addActionListener(e -> contentPanel.showPatientAdd());
 
         patientsectionPanel.add(addPatient, BorderLayout.EAST);
         headerPanel.add(patientsectionPanel, BorderLayout.NORTH);
 
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        searchPanel.setBackground(AppColors.BACKGROUND);
+
         JLabel searchTitle = new JLabel("Search:");
+        searchTitle.setFont(AppFonts.NORMAL);
+        searchTitle.setForeground(AppColors.TEXT);
+
         JTextField searchField = new JTextField(20);
+        searchField.setFont(AppFonts.NORMAL);
+
         JButton searchBtn = new JButton("Search");
+        UIStyle.styleSecondaryButton(searchBtn);
 
         // Search Button Functionality
         searchBtn.addActionListener(e -> {
@@ -94,6 +106,7 @@ public class PatientPanel extends JPanel {
         );
 
         tablePatients = new JTable(tableModel);
+        UIStyle.styleTable(tablePatients);
 
         refreshTable();
 
@@ -102,10 +115,16 @@ public class PatientPanel extends JPanel {
 
 
         // Footer
-        JPanel buttonPanel = new JPanel();
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+        buttonPanel.setBackground(AppColors.BACKGROUND);
+
         JButton viewBtn = new JButton("View Patient");
         JButton editBtn = new JButton("Edit");
         JButton deleteBtn = new JButton("Delete");
+
+        UIStyle.styleSecondaryButton(viewBtn);
+        UIStyle.styleSecondaryButton(editBtn);
+        UIStyle.styleDeleteButton(deleteBtn);
         deleteBtn.addActionListener(e -> deleteSelectedPatient());
 
         // View Button Func
@@ -199,6 +218,7 @@ public class PatientPanel extends JPanel {
         }
 
         tablePatients.setModel(new DefaultTableModel(tableData, tableTitles));
+        UIStyle.styleTable(tablePatients);
     }
 
     public void refreshTable() {

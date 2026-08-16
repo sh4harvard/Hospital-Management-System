@@ -18,11 +18,13 @@ public class MainFrame extends JFrame{
         this.hospital = hospital;
 
 
-        setSize(1100,700);
+        setSize(1200, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         setLayout(new BorderLayout());
+
+        getContentPane().setBackground(AppColors.BACKGROUND);
 
 
         add(new TitlePanel(), BorderLayout.NORTH);

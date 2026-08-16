@@ -24,11 +24,15 @@ public class HospitalBillPanel extends JPanel {
 
         this.hospital = hospital;
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 15));
+        setBackground(AppColors.BACKGROUND);
 
-        JPanel headerPanel = new JPanel();
+        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        headerPanel.setBackground(AppColors.BACKGROUND);
+
         JLabel title = new JLabel("Hospital Billing");
-        title.setFont(new Font("Arial", Font.BOLD, 24));
+        UIStyle.styleTitle(title);
+
         headerPanel.add(title);
 
         add(headerPanel, BorderLayout.NORTH);
@@ -44,12 +48,15 @@ public class HospitalBillPanel extends JPanel {
         tableModel = new DefaultTableModel(titles, 0);
 
         billTable = new JTable(tableModel);
-        billTable.setRowHeight(30);
+        UIStyle.styleTable(billTable);
 
         add(new JScrollPane(billTable), BorderLayout.CENTER);
 
-        JPanel footer = new JPanel(new BorderLayout());
-        JPanel summaryPanel = new JPanel(new GridLayout(3, 2));
+        JPanel footer = new JPanel(new BorderLayout(15, 0));
+        footer.setBackground(AppColors.BACKGROUND);
+
+        JPanel summaryPanel = new JPanel(new GridLayout(3, 2, 10, 5));
+        summaryPanel.setBackground(AppColors.BACKGROUND);
 
         summaryPanel.add(new JLabel("Paid:"));
         paidLabel = new JLabel();
@@ -71,17 +78,21 @@ public class HospitalBillPanel extends JPanel {
         JPanel btn = new JPanel();
 
         JButton addBtn = new JButton("Add Charge");
+        UIStyle.styleButton(addBtn);
         addBtn.addActionListener(e -> addCharge());
 
         JButton deleteBtn = new JButton("Delete Charge");
+        UIStyle.styleDeleteButton(deleteBtn);
         deleteBtn.addActionListener(e -> deleteCharge());
 
         JButton payBtn = new JButton("Mark as Paid");
+        UIStyle.styleButton(payBtn);
         payBtn.addActionListener(e -> markAsPaid());
 
         btn.add(addBtn);
-        btn.add(deleteBtn);
         btn.add(payBtn);
+        btn.add(deleteBtn);
+
 
         footer.add(btn, BorderLayout.EAST);
 

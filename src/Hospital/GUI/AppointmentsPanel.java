@@ -23,11 +23,12 @@ public class AppointmentsPanel extends JPanel {
 
         this.hospital = hospital;
 
-        setLayout(new BorderLayout());
-
+        setLayout(new BorderLayout(0, 15));
+        setBackground(AppColors.BACKGROUND);
 
         JLabel title = new JLabel("Appointments");
-        title.setFont(new Font("Arial", Font.BOLD, 20));
+        UIStyle.styleTitle(title);
+
         add(title, BorderLayout.NORTH);
 
 
@@ -41,13 +42,18 @@ public class AppointmentsPanel extends JPanel {
 
         tableModel = new DefaultTableModel(titles, 0);
         appointmentsTable = new JTable(tableModel);
+        UIStyle.styleTable(appointmentsTable);
 
         JScrollPane scrollPane = new JScrollPane(appointmentsTable);
         add(scrollPane, BorderLayout.CENTER);
 
 
-        JPanel buttonFooterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel buttonFooterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+        buttonFooterPanel.setBackground(AppColors.BACKGROUND);
+
         JButton newAppointmentButton = new JButton("New Appointment");
+        UIStyle.styleButton(newAppointmentButton);
+
         buttonFooterPanel.add(newAppointmentButton);
         newAppointmentButton.addActionListener(e -> createNewAppointment());
 
@@ -77,6 +83,7 @@ public class AppointmentsPanel extends JPanel {
                     appointment.getApStatus()
             });
         }
+
     }
 
     private void createNewAppointment() {

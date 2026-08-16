@@ -18,21 +18,24 @@ public class MedicalServicePanel extends JPanel {
 
         this.hospital = hospital;
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 15));
+        setBackground(AppColors.BACKGROUND);
 
         // Header
 
         JPanel headerPanel = new JPanel(new BorderLayout());
 
         JLabel title = new JLabel("Medical Services");
-        title.setFont(new Font("Arial", Font.BOLD, 25));
+        UIStyle.styleTitle(title);
 
         JButton addBtn = new JButton("Add Service");
+        UIStyle.styleButton(addBtn);
 
         addBtn.addActionListener(e -> addService());
 
         headerPanel.add(title, BorderLayout.WEST);
         headerPanel.add(addBtn, BorderLayout.EAST);
+        headerPanel.setBackground(AppColors.BACKGROUND);
 
         add(headerPanel, BorderLayout.NORTH);
 
@@ -47,19 +50,28 @@ public class MedicalServicePanel extends JPanel {
         tableModel = new DefaultTableModel(titles, 0);
 
         table = new JTable(tableModel);
-        table.setRowHeight(30);
+        UIStyle.styleTable(table);
 
         refreshTable();
 
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createLineBorder(AppColors.BORDER));
+        scrollPane.getViewport().setBackground(AppColors.WHITE);
+
+        add(scrollPane, BorderLayout.CENTER);
 
         // Footer
 
-        JPanel footerButtonPanel =
-                new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel footerButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+
+        footerButtonPanel.setBackground(AppColors.BACKGROUND);
 
         JButton editBtn = new JButton("Edit");
         JButton deleteBtn = new JButton("Delete");
+
+        UIStyle.styleSecondaryButton(editBtn);
+        UIStyle.styleDeleteButton(deleteBtn);
+
 
         editBtn.addActionListener(e -> editService());
         deleteBtn.addActionListener(e -> deleteService());
@@ -95,8 +107,7 @@ public class MedicalServicePanel extends JPanel {
         JTextField costField =
                 new JTextField();
 
-        JPanel panel =
-                new JPanel(new GridLayout(2, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(2, 2, 10, 10));
 
         panel.add(new JLabel("Service Name:"));
         panel.add(nameField);

@@ -21,25 +21,24 @@ public class WardPanel extends JPanel {
         this.hospital = hospital;
         this.contentPanel = contentPanel;
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 15));
+        setBackground(AppColors.BACKGROUND);
+
 
         // Header
-        JPanel headerPanel = new JPanel(
-                new BorderLayout()
-        );
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(AppColors.BACKGROUND);
 
         JLabel title = new JLabel("Wards");
-        title.setFont(new Font("Arial", Font.BOLD, 24));
+        UIStyle.styleTitle(title);
 
         JButton addWardBtn = new JButton("Add Ward");
+        UIStyle.styleButton(addWardBtn);
 
         addWardBtn.addActionListener(e -> addNewWard());
 
         headerPanel.add(title, BorderLayout.WEST);
-
         headerPanel.add(addWardBtn, BorderLayout.EAST);
-
-
         add(headerPanel, BorderLayout.NORTH);
 
 
@@ -56,7 +55,7 @@ public class WardPanel extends JPanel {
                 new DefaultTableModel(titles, 0)
         );
 
-        wardTable.setRowHeight(30);
+        UIStyle.styleTable(wardTable);
 
         add(
                 new JScrollPane(wardTable),
@@ -65,37 +64,29 @@ public class WardPanel extends JPanel {
 
 
         // Footer
-        JPanel footerBtnPanel =
-                new JPanel(
-                        new FlowLayout(FlowLayout.RIGHT)
-                );
+        JPanel footerBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+        footerBtnPanel.setBackground(AppColors.BACKGROUND);
+
 
         JButton viewBtn = new JButton("View");
         JButton editBtn = new JButton("Edit");
         JButton deleteBtn = new JButton("Delete");
 
+        UIStyle.styleSecondaryButton(viewBtn);
+        UIStyle.styleSecondaryButton(editBtn);
+        UIStyle.styleDeleteButton(deleteBtn);
+
         footerBtnPanel.add(viewBtn);
         footerBtnPanel.add(editBtn);
         footerBtnPanel.add(deleteBtn);
 
-        add(
-                footerBtnPanel,
-                BorderLayout.SOUTH
-        );
+        add(footerBtnPanel, BorderLayout.SOUTH);
 
 
         // Events
-        viewBtn.addActionListener(e ->
-                viewSelectedWard()
-        );
-
-        editBtn.addActionListener(e ->
-                editSelectedWard()
-        );
-
-        deleteBtn.addActionListener(e ->
-                deleteSelectedWard()
-        );
+        viewBtn.addActionListener(e -> viewSelectedWard());
+        editBtn.addActionListener(e -> editSelectedWard());
+        deleteBtn.addActionListener(e -> deleteSelectedWard());
 
         refreshTable();
     }
@@ -144,7 +135,7 @@ public class WardPanel extends JPanel {
                 }
         );
 
-        wardTable.setRowHeight(30);
+        UIStyle.styleTable(wardTable);
     }
 
 

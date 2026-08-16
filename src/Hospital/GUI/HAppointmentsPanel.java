@@ -21,18 +21,15 @@ public class HAppointmentsPanel extends JPanel {
         this.hospital = hospital;
         this.contentPanel = contentPanel;
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 15));
+        setBackground(AppColors.BACKGROUND);
 
         // Header
-        JPanel headerPanel =
-                new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        headerPanel.setBackground(AppColors.BACKGROUND);
 
-        JLabel title =
-                new JLabel("Appointments");
-
-        title.setFont(
-                new Font("Arial", Font.BOLD, 24)
-        );
+        JLabel title = new JLabel("Appointments");
+        UIStyle.styleTitle(title);
 
         headerPanel.add(title);
 
@@ -57,37 +54,32 @@ public class HAppointmentsPanel extends JPanel {
         };
 
         table = new JTable(tableModel);
+        UIStyle.styleTable(table);
 
-        table.setRowHeight(30);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createLineBorder(AppColors.BORDER));
+        scrollPane.getViewport().setBackground(AppColors.WHITE);
 
-        add(
-                new JScrollPane(table),
-                BorderLayout.CENTER
-        );
+        add(scrollPane, BorderLayout.CENTER);
 
         // Footer
-        JPanel footerButtonPanel =
-                new JPanel(
-                        new FlowLayout(FlowLayout.RIGHT)
-                );
+        JPanel footerButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+        footerButtonPanel.setBackground(AppColors.BACKGROUND);
 
-        JButton addBtn =
-                new JButton("Add");
 
-        JButton completeBtn =
-                new JButton("Complete");
+        JButton addBtn = new JButton("Add");
+        JButton completeBtn = new JButton("Complete");
+        JButton cancelBtn = new JButton("Cancel");
 
-        JButton cancelBtn =
-                new JButton("Cancel");
+        UIStyle.styleSecondaryButton(addBtn);
+        UIStyle.styleSecondaryButton(completeBtn);
+        UIStyle.styleDeleteButton(cancelBtn);
 
         footerButtonPanel.add(addBtn);
         footerButtonPanel.add(completeBtn);
         footerButtonPanel.add(cancelBtn);
 
-        add(
-                footerButtonPanel,
-                BorderLayout.SOUTH
-        );
+        add(footerButtonPanel, BorderLayout.SOUTH);
 
 
         refreshTable();

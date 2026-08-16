@@ -21,27 +21,39 @@ public class DoctorPanel extends JPanel {
         this.hospital = hospital;
         this.contentPanel = contentPanel;
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 15));
+        setBackground(AppColors.BACKGROUND);
 
         // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(AppColors.BACKGROUND);
 
         JPanel doctorSectionPanel = new JPanel(new BorderLayout());
+        doctorSectionPanel.setBackground(AppColors.BACKGROUND);
 
         JLabel section = new JLabel("Doctors");
+        UIStyle.styleTitle(section);
         doctorSectionPanel.add(section, BorderLayout.WEST);
 
         JButton addDoctor = new JButton("Add Doctor");
+        UIStyle.styleButton(addDoctor);
 
         doctorSectionPanel.add(addDoctor, BorderLayout.EAST);
 
         headerPanel.add(doctorSectionPanel, BorderLayout.NORTH);
 
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        searchPanel.setBackground(AppColors.BACKGROUND);
 
         JLabel searchTitle = new JLabel("Search:");
+        searchTitle.setFont(AppFonts.NORMAL);
+        searchTitle.setForeground(AppColors.TEXT);
+
         JTextField searchField = new JTextField(20);
+        searchField.setFont(AppFonts.NORMAL);
+
         JButton searchBtn = new JButton("Search");
+        UIStyle.styleSecondaryButton(searchBtn);
 
         searchBtn.addActionListener(e -> {
 
@@ -93,6 +105,7 @@ public class DoctorPanel extends JPanel {
         );
 
         tableDoctors = new JTable(tableModel);
+        UIStyle.styleTable(tableDoctors);
 
 
         JScrollPane scrollTable = new JScrollPane(tableDoctors);
@@ -100,11 +113,16 @@ public class DoctorPanel extends JPanel {
         add(scrollTable, BorderLayout.CENTER);
 
         // Footer
-        JPanel buttonPanel = new JPanel();
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+        buttonPanel.setBackground(AppColors.BACKGROUND);
 
         JButton viewBtn = new JButton("View Doctor");
         JButton editBtn = new JButton("Edit");
         JButton deleteBtn = new JButton("Delete");
+
+        UIStyle.styleSecondaryButton(viewBtn);
+        UIStyle.styleSecondaryButton(editBtn);
+        UIStyle.styleDeleteButton(deleteBtn);
 
         buttonPanel.add(viewBtn);
         buttonPanel.add(editBtn);
@@ -221,6 +239,8 @@ public class DoctorPanel extends JPanel {
                     }
                 }
         );
+
+        UIStyle.styleTable(tableDoctors);
     }
 
     private void refreshDoctorTable() {
@@ -279,6 +299,8 @@ public class DoctorPanel extends JPanel {
                     }
                 }
         );
+
+        UIStyle.styleTable(tableDoctors);
     }
 
 
