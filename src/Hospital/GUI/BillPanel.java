@@ -62,6 +62,10 @@ public class BillPanel extends JPanel{
         updateBill();
     }
 
+    public void refreshBill() {
+        updateBill();
+    }
+
     private void updateBill() {
 
         if (patient == null || patient.getBill() == null) {

@@ -25,15 +25,19 @@ public class MenuPanel extends JPanel {
         hospitalBtn.addActionListener(e -> {
             contentPanel.showHospital();
         });
+
         patientBtn.addActionListener(e -> {
-            contentPanel.showPanel("PATIENTS");
+            contentPanel.showPatients();
         });
+
         doctorBtn.addActionListener(e -> {
-            contentPanel.showPanel("DOCTORS");
+            contentPanel.showDoctors();
         });
+
         appointmentBtn.addActionListener(e -> {
-            contentPanel.showPanel("APPOINTMENTS");
+            contentPanel.showAppointments();
         });
+
 
         JPanel exitPanel = new JPanel();
 

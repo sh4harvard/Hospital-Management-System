@@ -74,6 +74,8 @@ public class ContentPanel extends JPanel {
         appointmentAddPanel = new AppointmentAddPanel(hospital, this);
         add(appointmentAddPanel, "APPOINTMENT_ADD");
 
+        showPanel("HOSPITAL");
+
     }
 
     public void showPanel(String name) {

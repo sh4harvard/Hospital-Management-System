@@ -212,8 +212,7 @@ public class DatabaseSaver {
 
     private void saveCharges(Connection connection) throws SQLException {
 
-        String sql =
-                "INSERT INTO charges " +
+        String sql = "INSERT INTO charges " +
                         "(id, patient_id, service_id, pay_status, charge_date) " +
                         "VALUES (?, ?, ?, ?, ?)";
 
@@ -222,12 +221,32 @@ public class DatabaseSaver {
 
             for (Patient patient : hospital.getPatients()) {
 
+                if (patient.getBill() == null) {
+                    continue;
+                }
+
                 for (Charge charge : patient.getBill().getCharges()) {
+
+                    if (charge.getService() == null) {
+                        continue;
+                    }
+
+                    System.out.println(
+                            "SAVING CHARGE: " +
+                                    charge.getId() +
+                                    " | " +
+                                    charge.getService().getName() +
+                                    " | paid=" +
+                                    charge.getPayStatus()
+                    );
 
                     statement.setInt(1, charge.getId());
                     statement.setInt(2, patient.getId());
                     statement.setInt(3, charge.getService().getId());
+
+                    // 1 = paid, 0 = unpaid
                     statement.setInt(4, charge.getPayStatus() ? 1 : 0);
+
                     statement.setString(5, charge.getDate().toString());
 
                     statement.executeUpdate();

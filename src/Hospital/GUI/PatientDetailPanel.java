@@ -152,4 +152,8 @@ public class PatientDetailPanel extends JPanel {
             wardLabel.setText("None");
         }
     }
+
+    public void refreshBill() {
+        billPanel.refreshBill();
+    }
 }

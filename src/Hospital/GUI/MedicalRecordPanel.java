@@ -13,16 +13,14 @@ public class MedicalRecordPanel extends JPanel {
     private JTextArea diagnosisINFO;
     private JTextArea prescribINFO;
     private JTextArea noteINFO;
+
     private JLabel lastPrescrib;
 
     public MedicalRecordPanel(){
 
         setLayout(new BorderLayout());
 
-        diagnosisINFO = new JTextArea(4, 40);
-        prescribINFO = new JTextArea(4, 40);
-        noteINFO = new JTextArea(4, 40);
-        lastPrescrib = new JLabel();
+
 
         // Header
         JLabel title = new JLabel("Medical Record");
@@ -34,35 +32,40 @@ public class MedicalRecordPanel extends JPanel {
         JPanel medicalINFOPanel = new JPanel();
         medicalINFOPanel.setLayout(new BoxLayout(medicalINFOPanel, BoxLayout.Y_AXIS));
 
+
         // Diagnosis
         JLabel diagnosisField = new JLabel("Diagnosis");
-        JTextArea diagnosisINFO = new JTextArea(4, 40);
 
-        // for text to move to next line and between the spaces
+        diagnosisINFO = new JTextArea(4, 40);
         diagnosisINFO.setLineWrap(true);
         diagnosisINFO.setWrapStyleWord(true);
+        diagnosisINFO.setEditable(false);
+
 
         JScrollPane diagnosisScroll = new JScrollPane(diagnosisINFO);
 
 
         // Prescriptions & Medications
         JLabel prescribField = new JLabel("Prescriptions & Medications");
-        JTextArea prescribINFO = new JTextArea(4, 40);
 
-        // for text to move to next line and between the spaces
+        prescribINFO = new JTextArea(4, 40);
         prescribINFO.setLineWrap(true);
         prescribINFO.setWrapStyleWord(true);
+        prescribINFO.setEditable(false);
+
+
 
         JScrollPane prescribScroll = new JScrollPane(prescribINFO);
 
 
         // Notes
         JLabel noteField = new JLabel("Notes");
-        JTextArea noteINFO = new JTextArea(4, 40);
 
-        // for text to move to next line and between the spaces
+        noteINFO = new JTextArea(4, 40);
         noteINFO.setLineWrap(true);
         noteINFO.setWrapStyleWord(true);
+        noteINFO.setEditable(false);
+
 
         JScrollPane noteScroll = new JScrollPane(noteINFO);
 
@@ -81,12 +84,43 @@ public class MedicalRecordPanel extends JPanel {
         // Footer
         JPanel medicalPanelFooter = new JPanel(new BorderLayout());
 
-        JLabel lastPrescrib = new JLabel("05, 2026");
+        lastPrescrib = new JLabel();
+        lastPrescrib.setText("No diagnosis date");
         medicalPanelFooter.add(lastPrescrib, BorderLayout.WEST);
 
         JButton editMedicalINFO = new JButton("Edit");
         editMedicalINFO.setAlignmentX(JButton.EAST);
         medicalPanelFooter.add(editMedicalINFO, BorderLayout.EAST);
+
+        editMedicalINFO.addActionListener(e -> {
+
+            if (editMedicalINFO.getText().equals("Edit")) {
+
+                diagnosisINFO.setEditable(true);
+                prescribINFO.setEditable(true);
+                noteINFO.setEditable(true);
+
+                editMedicalINFO.setText("Save");
+
+            } else {
+
+                if (patient != null && patient.getMedicalRecord() != null) {
+
+                    MedicalRecord record = patient.getMedicalRecord();
+
+                    record.setDiagnosis(diagnosisINFO.getText());
+                    record.setPrescription(prescribINFO.getText());
+                    record.setNotes(noteINFO.getText());
+                    record.setLastDiagnoseDate(java.time.LocalDate.now());
+
+                    diagnosisINFO.setEditable(false);
+                    prescribINFO.setEditable(false);
+                    noteINFO.setEditable(false);
+
+                    editMedicalINFO.setText("Edit");
+                }
+            }
+        });
 
         add(medicalPanelFooter, BorderLayout.SOUTH);
     }

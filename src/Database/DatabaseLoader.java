@@ -20,6 +20,14 @@ public class DatabaseLoader {
     }
 
     public void load() throws SQLException {
+
+        hospital.getWards().clear();
+        hospital.getMedicalServices().clear();
+        hospital.getPatients().clear();
+        hospital.getDoctors().clear();
+        hospital.getAppointments().clear();
+        hospital.getHospitalIncomes().clear();
+
         try (Connection connection = DatabaseConnection.getConnection()) {
 
             loadWards(connection);
@@ -98,7 +106,6 @@ public class DatabaseLoader {
                     Ward ward = hospital.findWardById(wardId);
 
                     if (ward != null) {
-                        patient.setWard(ward);
                         ward.addPatient(patient);
                     }
                 }
@@ -142,7 +149,6 @@ public class DatabaseLoader {
                     Ward ward = hospital.findWardById(wardId);
 
                     if (ward != null) {
-                        doctor.setWard(ward);
                         ward.addDoctor(doctor);
                     }
                 }
@@ -174,8 +180,20 @@ public class DatabaseLoader {
 
                 Patient patient = hospital.findPatientById(id);
 
+                if (patient == null) {
+                    System.out.println(
+                            "Warning: Medical record refers to missing patient " + id
+                    );
+                    continue;
+                }
+
                 MedicalRecord record = new MedicalRecord(id);
-                record.setMRecord(diagnosis, prescription, notes, lastDate);
+                record.setMRecord(
+                        diagnosis,
+                        prescription,
+                        notes,
+                        lastDate
+                );
 
                 patient.setMedicalRecord(record);
             }
@@ -183,24 +201,61 @@ public class DatabaseLoader {
     }
 
     private void loadCharges(Connection connection) throws SQLException {
-        String sql = "SELECT id, patient_id, service_id, pay_status, charge_date " +
-                "FROM charges";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+        String sql =
+                "SELECT id, patient_id, service_id, pay_status, charge_date " +
+                        "FROM charges";
+
+        try (PreparedStatement statement =
+                     connection.prepareStatement(sql);
+             ResultSet resultSet =
+                     statement.executeQuery()) {
 
             while (resultSet.next()) {
 
                 int id = resultSet.getInt("id");
                 int patientId = resultSet.getInt("patient_id");
                 int serviceId = resultSet.getInt("service_id");
-                boolean payStatus = resultSet.getInt("pay_status") == 1;
-                LocalDate date = LocalDate.parse(resultSet.getString("charge_date"));
 
-                Patient patient = hospital.findPatientById(patientId);
-                MedicalService service = hospital.findMedicalServicebyId(serviceId);
+                boolean payStatus =
+                        resultSet.getInt("pay_status") == 1;
 
-                Charge charge = new Charge(id, service, date);
+                LocalDate date =
+                        LocalDate.parse(
+                                resultSet.getString("charge_date")
+                        );
+
+                Patient patient =
+                        hospital.findPatientById(patientId);
+
+                MedicalService service =
+                        hospital.findMedicalServicebyId(serviceId);
+
+                if (patient == null) {
+                    System.out.println(
+                            "Warning: Charge " + id +
+                                    " refers to missing patient " +
+                                    patientId
+                    );
+                    continue;
+                }
+
+                if (service == null) {
+                    System.out.println(
+                            "Warning: Charge " + id +
+                                    " refers to missing medical service " +
+                                    serviceId
+                    );
+                    continue;
+                }
+
+                Charge charge =
+                        new Charge(
+                                id,
+                                service,
+                                date
+                        );
+
                 charge.setPayStatus(payStatus);
 
                 patient.getBill().addCharge(charge);
