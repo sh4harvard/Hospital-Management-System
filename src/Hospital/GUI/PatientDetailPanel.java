@@ -39,7 +39,7 @@ public class PatientDetailPanel extends JPanel {
 
         medicalRecordPanel = new MedicalRecordPanel();
         billPanel = new BillPanel();
-        appointmentsPanel = new AppointmentsPanel();
+        appointmentsPanel = new AppointmentsPanel(hospital);
 
 
         setLayout(new BorderLayout());

@@ -10,6 +10,7 @@ public class HospitalPanel extends JPanel{
     private final HospitalSystem hospital;
     private final ContentPanel contentPanel;
     private final HospitalBillPanel billingPanel;
+    private final WardPanel wardPanel;
 
     private JLabel patientCount;
     private JLabel doctorCount;
@@ -70,7 +71,8 @@ public class HospitalPanel extends JPanel{
 
         JTabbedPane hinfoTabs = new JTabbedPane();
 
-        hinfoTabs.add("Wards", new WardPanel(hospital, contentPanel));
+        wardPanel = new WardPanel(hospital, contentPanel);
+        hinfoTabs.add("Wards", wardPanel);
         hinfoTabs.add("Medical Services", new MedicalServicePanel(hospital));
         billingPanel = new HospitalBillPanel(hospital);
         hinfoTabs.add("Billing", billingPanel);
@@ -100,6 +102,8 @@ public class HospitalPanel extends JPanel{
         wardCount.setText(
                 String.valueOf(hospital.getWards().size())
         );
+
+        wardPanel.refreshTable();
 
         billingPanel.refreshTable();
     }

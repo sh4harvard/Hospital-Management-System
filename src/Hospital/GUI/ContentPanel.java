@@ -30,6 +30,7 @@ public class ContentPanel extends JPanel {
 
     private final WardPanel wardPanel;
     private final WardDetailPanel wardDetailPanel;
+    private final WardEditPanel wardEditPanel;
 
 
     public ContentPanel(HospitalSystem hospital){
@@ -63,8 +64,10 @@ public class ContentPanel extends JPanel {
 
         wardPanel = new WardPanel(hospital, this);
         wardDetailPanel = new WardDetailPanel(hospital, this);
+        wardEditPanel = new WardEditPanel(hospital, this);
         add(wardPanel, "WARDS");
         add(wardDetailPanel, "WARD_DETAIL");
+        add(wardEditPanel, "WARD_EDIT");
 
         hospitalPanel = new HospitalPanel(hospital, this);
         add(hospitalPanel, "HOSPITAL");
@@ -117,6 +120,7 @@ public class ContentPanel extends JPanel {
     }
 
     public void showDoctorAdd() {
+        doctorAddPanel.refreshWards();
         showPanel("DOCTOR_ADD");
     }
 
@@ -162,11 +166,15 @@ public class ContentPanel extends JPanel {
         showPanel("WARD_DETAIL");
     }
 
+    public void showWardEdit(Ward ward) {
+        wardEditPanel.setWard(ward);
+        showPanel("WARD_EDIT");
+    }
+
     public void showHospital() {
         hospitalPanel.refresh();
         showPanel("HOSPITAL");
     }
-
 
 }
 

@@ -185,8 +185,7 @@ public class HospitalSystem {
 
             ward.removePatient(patient);
 
-            if (ward.getPatients().isEmpty()
-                    && findWardBonusByWardId(ward.getId()) == null) {
+            if (ward.getPatients().isEmpty()) {
                 hospitalIncomes.add(new WardBonus(ward));
             }
         }
@@ -229,12 +228,10 @@ public class HospitalSystem {
 
     public void removeDoctor(Doctor doctor) {
 
-        // Remove  doctor ward
         if (doctor.getWard() != null) {
             doctor.getWard().removeDoctor(doctor);
         }
 
-        // Remove appointments
         ArrayList<Appointment> doctorAppointments =
                 new ArrayList<>(doctor.getAppointments());
 
@@ -242,9 +239,22 @@ public class HospitalSystem {
             cancelAppointment(appointment);
         }
 
-        // Remove doctor from hospital
         doctors.remove(doctor);
     }
+
+    public void dischargeDoctor(Doctor doctor) {
+
+        if (doctor == null) {
+            return;
+        }
+
+        Ward ward = doctor.getWard();
+
+        if (ward != null) {
+            ward.removeDoctor(doctor);
+        }
+    }
+
     //findDoctorById(String id)
 
 
@@ -274,6 +284,40 @@ public class HospitalSystem {
         return null;
     }
 
+    public boolean deleteWard(Ward ward) {
+
+        if (ward == null) {
+            return false;
+        }
+
+        // A ward cannot be deleted while it contains patients
+        if (!ward.getPatients().isEmpty()) {
+            return false;
+        }
+
+        // A ward cannot be deleted while it contains doctors
+        if (!ward.getDoctors().isEmpty()) {
+            return false;
+        }
+
+        // Remove any previous bonuses belonging to this ward
+        ArrayList<HospitalIncome> incomesToRemove =
+                new ArrayList<>();
+
+        for (HospitalIncome income : hospitalIncomes) {
+
+            if (income.getType().equals("WARD_BONUS")
+                    && income.getIncomeProperty() == ward.getId()) {
+
+                incomesToRemove.add(income);
+            }
+        }
+
+        hospitalIncomes.removeAll(incomesToRemove);
+
+        return wards.remove(ward);
+    }
+
     public boolean transferWardPatient(Patient patient, Ward newWard) {
 
         if (patient.getWard() == newWard) {
@@ -290,8 +334,7 @@ public class HospitalSystem {
         if (oldWard != null) {
             oldWard.removePatient(patient);
 
-            if (oldWard.getPatients().isEmpty()
-                    && findWardBonusByWardId(oldWard.getId()) == null) {
+            if (oldWard.getPatients().isEmpty()) {
 
                 hospitalIncomes.add(new WardBonus(oldWard));
             }
@@ -314,16 +357,25 @@ public class HospitalSystem {
 
         if (oldWard != null) {
             oldWard.removeDoctor(doctor);
-
-            if (oldWard.getDoctors().isEmpty()
-                    && findWardBonusByWardId(oldWard.getId()) == null) {
-
-                hospitalIncomes.add(new WardBonus(oldWard));
-            }
         }
 
         if (newWard != null) {
             newWard.addDoctor(doctor);
+        }
+
+        return true;
+    }
+
+    public boolean isHospitalFull() {
+
+        if (wards.isEmpty()) {
+            return true;
+        }
+
+        for (Ward ward : wards) {
+            if (ward.getPatients().size() < ward.getCapacity()) {
+                return false;
+            }
         }
 
         return true;
@@ -375,6 +427,14 @@ public class HospitalSystem {
             return null;
         }
 
+        MedicalService consultation = findMedicalServicebyId(1);
+
+        if (consultation == null) {
+            lastAppointmentError =
+                    "No medical service with ID 1 exists.";
+            return null;
+        }
+
         Appointment appointment =
                 new Appointment(
                         id,
@@ -399,8 +459,6 @@ public class HospitalSystem {
 
         Collections.sort(patient.getAppointments());
 
-
-        MedicalService consultation = findMedicalServicebyId(1);
 
         if (consultation == null) {
             lastAppointmentError =
@@ -498,6 +556,27 @@ public class HospitalSystem {
 
         return medicalServices.remove(service);
     }
+
+    public Charge createCharge(Patient patient, MedicalService service) {
+
+        Charge charge = new Charge(
+                generateChargeId(),
+                service,
+                LocalDate.now()
+        );
+
+        patient.getBill().addCharge(charge);
+
+        hospitalIncomes.add(
+                new IncomeMedicalService(
+                        service,
+                        patient
+                )
+        );
+
+        return charge;
+    }
+
     // Budget
 
     public ArrayList<HospitalIncome> getHospitalIncomes() {return hospitalIncomes;}

@@ -21,6 +21,12 @@ public class WardDetailPanel extends JPanel {
     private JLabel patientsLabel;
     private JLabel doctorsLabel;
 
+    private JList<Patient> patientList;
+    private DefaultListModel<Patient> patientListModel;
+
+    private JList<Doctor> doctorList;
+    private DefaultListModel<Doctor> doctorListModel;
+
     public WardDetailPanel(
             HospitalSystem hospital,
             ContentPanel contentPanel) {
@@ -30,7 +36,8 @@ public class WardDetailPanel extends JPanel {
 
         setLayout(new BorderLayout());
 
-        // Header
+        //header
+
         JPanel headerPanel =
                 new JPanel(new BorderLayout());
 
@@ -59,9 +66,13 @@ public class WardDetailPanel extends JPanel {
         );
 
 
-        // Main
+        // Mainbody
+
         JPanel mainPanel =
                 new JPanel(new BorderLayout());
+
+
+
 
         JPanel infoPanel =
                 new JPanel(
@@ -104,14 +115,16 @@ public class WardDetailPanel extends JPanel {
         );
 
 
-        // Patient and Doctor lists
+
+
         JPanel listsPanel =
                 new JPanel(
                         new GridLayout(1, 2, 20, 0)
                 );
 
 
-        // Patients
+        // patients
+
         JPanel patientPanel =
                 new JPanel(new BorderLayout());
 
@@ -120,8 +133,17 @@ public class WardDetailPanel extends JPanel {
                 BorderLayout.NORTH
         );
 
-        JList<String> patientList =
-                new JList<>();
+
+        patientListModel =
+                new DefaultListModel<>();
+
+        patientList =
+                new JList<>(patientListModel);
+
+        patientList.setSelectionMode(
+                ListSelectionModel.SINGLE_SELECTION
+        );
+
 
         patientPanel.add(
                 new JScrollPane(patientList),
@@ -129,7 +151,32 @@ public class WardDetailPanel extends JPanel {
         );
 
 
-        // Doctors
+        // Discharge button
+
+        JButton dischargeBtn =
+                new JButton("Discharge Patient");
+
+        dischargeBtn.addActionListener(e ->
+                dischargeSelectedPatient()
+        );
+
+        JPanel patientButtonPanel =
+                new JPanel(
+                        new FlowLayout(
+                                FlowLayout.RIGHT
+                        )
+                );
+
+        patientButtonPanel.add(dischargeBtn);
+
+        patientPanel.add(
+                patientButtonPanel,
+                BorderLayout.SOUTH
+        );
+
+
+        // doctors
+
         JPanel doctorPanel =
                 new JPanel(new BorderLayout());
 
@@ -138,17 +185,49 @@ public class WardDetailPanel extends JPanel {
                 BorderLayout.NORTH
         );
 
-        JList<String> doctorList =
-                new JList<>();
+
+        doctorListModel =
+                new DefaultListModel<>();
+
+        doctorList =
+                new JList<>(doctorListModel);
+
+        doctorList.setSelectionMode(
+                ListSelectionModel.SINGLE_SELECTION
+        );
+
 
         doctorPanel.add(
                 new JScrollPane(doctorList),
                 BorderLayout.CENTER
         );
 
+        JButton dischargeDoctorBtn =
+                new JButton("Discharge Doctor");
+
+        dischargeDoctorBtn.addActionListener(e ->
+                dischargeSelectedDoctor()
+        );
+
+        JPanel doctorButtonPanel =
+                new JPanel(
+                        new FlowLayout(
+                                FlowLayout.RIGHT
+                        )
+                );
+
+        doctorButtonPanel.add(dischargeDoctorBtn);
+
+        doctorPanel.add(
+                doctorButtonPanel,
+                BorderLayout.SOUTH
+        );
+
+
 
         listsPanel.add(patientPanel);
         listsPanel.add(doctorPanel);
+
 
         mainPanel.add(
                 listsPanel,
@@ -162,11 +241,13 @@ public class WardDetailPanel extends JPanel {
         );
 
 
-        // Back button
+
+
         backBtn.addActionListener(e ->
-                contentPanel.showWards()
+                contentPanel.showHospital()
         );
     }
+
 
 
     public void setWard(Ward ward) {
@@ -197,6 +278,174 @@ public class WardDetailPanel extends JPanel {
                 String.valueOf(
                         ward.getDoctors().size()
                 )
+        );
+
+
+
+        patientListModel.clear();
+
+        for (Patient patient :
+                ward.getPatients()) {
+
+            patientListModel.addElement(patient);
+        }
+
+
+
+        doctorListModel.clear();
+
+        for (Doctor doctor :
+                ward.getDoctors()) {
+
+            doctorListModel.addElement(doctor);
+        }
+    }
+
+
+
+    private void dischargeSelectedPatient() {
+
+        if (ward == null) {
+            return;
+        }
+
+
+        Patient patient =
+                patientList.getSelectedValue();
+
+
+        if (patient == null) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a patient first."
+            );
+
+            return;
+        }
+
+
+        int result =
+                JOptionPane.showConfirmDialog(
+                        this,
+                        "Discharge "
+                                + patient.getName()
+                                + " from "
+                                + ward.getName()
+                                + "?",
+                        "Discharge Patient",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+
+        if (result != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+
+        String patientName =
+                patient.getName();
+
+        String wardName =
+                ward.getName();
+
+
+
+        hospital.dischargePatient(patient);
+
+        System.out.println(
+                "AFTER DISCHARGE - Patient ward: "
+                        + patient.getWard()
+        );
+
+        System.out.println(
+                "AFTER DISCHARGE - Ward patients: "
+                        + ward.getPatients().size()
+        );
+
+        System.out.println(
+                "AFTER DISCHARGE - Hospital incomes: "
+                        + hospital.getHospitalIncomes().size()
+        );
+
+        System.out.println(
+                "AFTER DISCHARGE - Ward bonus: "
+                        + hospital.findWardBonusByWardId(
+                        ward.getId()
+                )
+        );
+
+
+
+        setWard(ward);
+
+
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Patient discharged successfully.\n\n"
+                        + "Patient: "
+                        + patientName
+                        + "\nWard: "
+                        + wardName,
+                "Discharge Successful",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    private void dischargeSelectedDoctor() {
+
+        if (ward == null) {
+            return;
+        }
+
+        Doctor doctor =
+                doctorList.getSelectedValue();
+
+        if (doctor == null) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a doctor first."
+            );
+
+            return;
+        }
+
+        int result =
+                JOptionPane.showConfirmDialog(
+                        this,
+                        "Discharge "
+                                + doctor.getName()
+                                + " from "
+                                + ward.getName()
+                                + "?",
+                        "Discharge Doctor",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+        if (result != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        String doctorName = doctor.getName();
+        String wardName = ward.getName();
+
+        hospital.dischargeDoctor(doctor);
+
+        setWard(ward);
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Doctor discharged successfully.\n\n"
+                        + "Doctor: "
+                        + doctorName
+                        + "\nWard: "
+                        + wardName,
+                "Discharge Successful",
+                JOptionPane.INFORMATION_MESSAGE
         );
     }
 }

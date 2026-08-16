@@ -32,6 +32,11 @@ public class MedicalService implements DisplayInformation{
     }
 
     @Override
+    public String toString() {
+        return name + " - " + cost;
+    }
+
+    @Override
     public String showInfo() {
         return id + "    " + name + "    " + cost;
     }

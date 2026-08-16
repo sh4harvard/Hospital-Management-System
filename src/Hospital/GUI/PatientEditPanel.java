@@ -102,6 +102,14 @@ public class PatientEditPanel extends JPanel {
         phoneField.setText(patient.getPhoneNumber());
 
         genderBox.setSelectedItem(patient.getGender());
+
+        // Refresh ward list
+        wardBox.removeAllItems();
+
+        for (Ward ward : hospital.getWards()) {
+            wardBox.addItem(ward);
+        }
+
         wardBox.setSelectedItem(patient.getWard());
     }
 
@@ -149,25 +157,81 @@ public class PatientEditPanel extends JPanel {
         Gender gender = (Gender) genderBox.getSelectedItem();
         Ward newWard = (Ward) wardBox.getSelectedItem();
 
-        patient.setName(name);
-        patient.setAge(age);
-        patient.setGender(gender);
-        patient.setPhoneNumber(phone);
-
         Ward oldWard = patient.getWard();
 
+
         if (oldWard != newWard) {
+
+            if (newWard != null &&
+                    newWard.getPatients().size() >= newWard.getCapacity()) {
+
+
+                if (hospital.isHospitalFull()) {
+
+                    int emergencyResult =
+                            JOptionPane.showConfirmDialog(
+                                    this,
+                                    "The hospital is completely full.\n\n" +
+                                            "Is this an emergency patient?",
+                                    "Hospital Full",
+                                    JOptionPane.YES_NO_OPTION,
+                                    JOptionPane.WARNING_MESSAGE
+                            );
+
+                    if (emergencyResult == JOptionPane.YES_OPTION) {
+
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "CRISIS ALERT!\n\n" +
+                                        "The hospital is completely full " +
+                                        "and an emergency patient has arrived.",
+                                "HOSPITAL CRISIS",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+
+                    } else {
+
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "The hospital is completely full.\n" +
+                                        "The patient cannot be admitted.",
+                                "Hospital Full",
+                                JOptionPane.WARNING_MESSAGE
+                        );
+                    }
+
+                } else {
+
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "The selected ward is full.\n",
+                            "Ward Full",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                }
+
+                return;
+            }
+
 
             if (!hospital.transferWardPatient(patient, newWard)) {
 
                 JOptionPane.showMessageDialog(
                         this,
-                        "The selected ward is full."
+                        "The patient could not be transferred.",
+                        "Transfer Failed",
+                        JOptionPane.ERROR_MESSAGE
                 );
 
                 return;
             }
         }
+
+
+        patient.setName(name);
+        patient.setAge(age);
+        patient.setGender(gender);
+        patient.setPhoneNumber(phone);
 
         JOptionPane.showMessageDialog(
                 this,

@@ -282,4 +282,13 @@ public class DoctorAddPanel extends JPanel {
             wardBox.addItem(ward);
         }
     }
+
+    public void refreshWards() {
+
+        wardBox.removeAllItems();
+
+        for (Ward ward : hospital.getWards()) {
+            wardBox.addItem(ward);
+        }
+    }
 }

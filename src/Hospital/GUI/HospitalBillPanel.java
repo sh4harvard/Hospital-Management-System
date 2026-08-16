@@ -2,7 +2,9 @@ package Hospital.GUI;
 
 import Hospital.Core.Charge;
 import Hospital.Core.HospitalSystem;
+import Hospital.Core.MedicalService;
 import Hospital.Core.Patient;
+import Hospital.Core.HospitalIncome;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -68,11 +70,16 @@ public class HospitalBillPanel extends JPanel {
 
         JPanel btn = new JPanel();
 
+        JButton addBtn = new JButton("Add Charge");
+        addBtn.addActionListener(e -> addCharge());
+
         JButton deleteBtn = new JButton("Delete Charge");
         deleteBtn.addActionListener(e -> deleteCharge());
 
         JButton payBtn = new JButton("Mark as Paid");
         payBtn.addActionListener(e -> markAsPaid());
+
+        btn.add(addBtn);
         btn.add(deleteBtn);
         btn.add(payBtn);
 
@@ -90,6 +97,7 @@ public class HospitalBillPanel extends JPanel {
         double paid = 0;
         double unpaid = 0;
 
+        // Patient charges
         for (Patient patient : hospital.getPatients()) {
 
             for (Charge charge : patient.getBill().getCharges()) {
@@ -109,6 +117,23 @@ public class HospitalBillPanel extends JPanel {
                 } else {
                     unpaid += cost;
                 }
+            }
+        }
+
+        // Hospital incomes
+        for (HospitalIncome income : hospital.getHospitalIncomes()) {
+
+            if (income.getType().equals("WARD_BONUS")) {
+
+                tableModel.addRow(new Object[]{
+                        "-",
+                        "-",
+                        income.getName(),
+                        income.getAmount(),
+                        "Income"
+                });
+
+                paid += income.getAmount();
             }
         }
 
@@ -164,6 +189,141 @@ public class HospitalBillPanel extends JPanel {
         JOptionPane.showMessageDialog(
                 this,
                 "Charge not found."
+        );
+    }
+
+    private void addCharge() {
+
+        if (hospital.getPatients().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "There are no patients."
+            );
+
+            return;
+        }
+
+        if (hospital.getMedicalServices().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "There are no medical services."
+            );
+
+            return;
+        }
+
+
+        // Patient selection
+
+        JComboBox<Patient> patientBox =
+                new JComboBox<>();
+
+        for (Patient patient : hospital.getPatients()) {
+            patientBox.addItem(patient);
+        }
+
+
+        // Medical service selection
+
+        JComboBox<MedicalService> serviceBox =
+                new JComboBox<>();
+
+        for (Hospital.Core.MedicalService service :
+                hospital.getMedicalServices()) {
+
+            serviceBox.addItem(service);
+        }
+
+
+        // Show selected service cost
+
+        JLabel costLabel = new JLabel();
+
+        serviceBox.addActionListener(e -> {
+
+            Hospital.Core.MedicalService service =
+                    (Hospital.Core.MedicalService)
+                            serviceBox.getSelectedItem();
+
+            if (service != null) {
+                costLabel.setText(
+                        String.valueOf(service.getCost())
+                );
+            }
+        });
+
+
+        JPanel panel =
+                new JPanel(new GridLayout(3, 2, 10, 10));
+
+        panel.add(new JLabel("Patient:"));
+        panel.add(patientBox);
+
+        panel.add(new JLabel("Medical Service:"));
+        panel.add(serviceBox);
+
+        panel.add(new JLabel("Cost:"));
+        panel.add(costLabel);
+
+
+        // Set initial cost
+
+        if (!hospital.getMedicalServices().isEmpty()) {
+
+            Hospital.Core.MedicalService service =
+                    hospital.getMedicalServices().get(0);
+
+            costLabel.setText(
+                    String.valueOf(service.getCost())
+            );
+        }
+
+
+        int result = JOptionPane.showConfirmDialog(
+                this,
+                panel,
+                "Add Medical Charge",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (result != JOptionPane.OK_OPTION) {
+            return;
+        }
+
+
+        Patient patient =
+                (Patient) patientBox.getSelectedItem();
+
+        Hospital.Core.MedicalService service =
+                (Hospital.Core.MedicalService)
+                        serviceBox.getSelectedItem();
+
+
+        if (patient == null || service == null) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a patient and medical service."
+            );
+
+            return;
+        }
+
+
+        hospital.createCharge(patient, service);
+
+        refreshTable();
+
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Charge added successfully.\n\n" +
+                        "Patient: " + patient.getName() +
+                        "\nService: " + service.getName() +
+                        "\nCost: " + service.getCost()
         );
     }
 

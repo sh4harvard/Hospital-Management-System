@@ -90,7 +90,6 @@ public class PatientAddPanel extends JPanel {
         String ageText = ageField.getText().trim();
         String phone = phoneField.getText().trim();
 
-
         if (name.isEmpty() ||
                 ageText.isEmpty() ||
                 phone.isEmpty()) {
@@ -129,31 +128,95 @@ public class PatientAddPanel extends JPanel {
         }
 
         Gender gender = (Gender) genderBox.getSelectedItem();
-
         Ward ward = (Ward) wardBox.getSelectedItem();
 
+        // A ward must be selected
+        if (ward == null) {
 
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a ward."
+            );
+
+            return;
+        }
+
+        // Check whether the selected ward is full
+        if (ward.getPatients().size() >= ward.getCapacity()) {
+
+            // If every ward is full, this is a hospital crisis situation
+            if (hospital.isHospitalFull()) {
+
+                int emergencyResult = JOptionPane.showConfirmDialog(
+                        this,
+                        "The hospital is completely full.\n\n" +
+                                "Is this an emergency patient?",
+                        "Hospital Full",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+
+                if (emergencyResult == JOptionPane.YES_OPTION) {
+
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "CRISIS ALERT!\n\n" +
+                                    "The hospital is completely full " +
+                                    "and an emergency patient has arrived.",
+                            "HOSPITAL CRISIS",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+
+                } else {
+
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "The hospital is completely full.\n" +
+                                    "The patient cannot be admitted.",
+                            "Hospital Full",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                }
+
+            } else {
+
+                // Only the selected ward is full
+                JOptionPane.showMessageDialog(
+                        this,
+                        "The selected ward is full.\n",
+                        "Ward Full",
+                        JOptionPane.WARNING_MESSAGE
+                );
+            }
+
+            return;
+        }
+
+        // Create patient only after we know admission is possible
         int id = hospital.generatePatientId();
 
-        Patient patient = new Patient(id, name, age, gender, phone);
+        Patient patient =
+                new Patient(
+                        id,
+                        name,
+                        age,
+                        gender,
+                        phone
+                );
 
         hospital.getPatients().add(patient);
 
+        if (!hospital.admitPatient(patient, ward)) {
 
-        if (ward != null) {
+            // Safety check
+            hospital.getPatients().remove(patient);
 
-            if (!hospital.admitPatient(patient, ward)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "The patient could not be admitted."
+            );
 
-                JOptionPane.showMessageDialog(
-                        this,
-                        "The selected ward is full."
-                );
-
-                // remove the patient because the admission failed
-                hospital.getPatients().remove(patient);
-
-                return;
-            }
+            return;
         }
 
         JOptionPane.showMessageDialog(
