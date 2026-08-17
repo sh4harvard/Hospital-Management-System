@@ -16,6 +16,12 @@ public class UIStyle {
         label.setForeground(AppColors.DARK_BLUE);
     }
 
+    public static void styleSubTitle(JLabel label) {
+        label.setFont(AppFonts.TITLE);
+        label.setForeground(AppColors.PRIMARY_BLUE);
+    }
+
+
     public static void styleButton(JButton button) {
         button.setFont(AppFonts.BUTTON);
         button.setForeground(AppColors.WHITE);
@@ -84,5 +90,26 @@ public class UIStyle {
         header.setBackground(AppColors.DARK_BLUE);
 
         header.setReorderingAllowed(false);
+    }
+
+    public static void styleFormTitle(JLabel label) {
+        label.setFont(AppFonts.NORMAL);
+        label.setForeground(AppColors.TEXT);
+    }
+
+    public static void styleField(JTextField field) {
+        field.setFont(AppFonts.NORMAL);
+        field.setForeground(AppColors.TEXT);
+        field.setBackground(AppColors.WHITE);
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(AppColors.BORDER),
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+    }
+
+    public static void styleComboBox(JComboBox<?> comboBox) {
+        comboBox.setFont(AppFonts.NORMAL);
+        comboBox.setForeground(AppColors.TEXT);
+        comboBox.setBackground(AppColors.WHITE);
     }
 }

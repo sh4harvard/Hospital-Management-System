@@ -31,44 +31,60 @@ public class DoctorAddPanel extends JPanel {
         this.hospital = hospital;
         this.contentPanel = contentPanel;
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(20, 20));
+        setBackground(AppColors.BACKGROUND);
+        setBorder(BorderFactory.createEmptyBorder(20, 25, 20, 25));
 
         // header
         JLabel title = new JLabel("Add Doctor");
-        title.setFont(new Font("Arial", Font.BOLD, 24));
+        UIStyle.styleTitle(title);
         add(title, BorderLayout.NORTH);
 
         // Main
         JPanel addFormPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        addFormPanel.setBackground(AppColors.WHITE);
+        addFormPanel.setBorder(UIStyle.createPanelBorder());
 
         // Personal Information
         JPanel personalPanel = new JPanel(new BorderLayout());
-        personalPanel.add(
-                new JLabel("Personal Information"),
-                BorderLayout.NORTH
-        );
+        personalPanel.setBackground(AppColors.WHITE);
+        personalPanel.setBorder(UIStyle.createPanelBorder());
 
-        JPanel personalFormPanel =
-                new JPanel(new GridLayout(4, 2, 10, 10));
+        JLabel personalInfo = new JLabel("Personal Information");
+        UIStyle.styleSubTitle(personalInfo);
+        personalPanel.add(personalInfo, BorderLayout.NORTH);
 
-        personalFormPanel.add(new JLabel("Name:"));
+        JPanel personalFormPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        personalFormPanel.setBackground(AppColors.WHITE);
 
+        JLabel nameTitle = new JLabel("Name:");
+        JLabel ageTitle = new JLabel("Age:");
+        JLabel genderTitle = new JLabel("Gender:");
+        JLabel phoneTitle = new JLabel("Phone:");
+
+        UIStyle.styleFormTitle(nameTitle);
+        UIStyle.styleFormTitle(ageTitle);
+        UIStyle.styleFormTitle(genderTitle);
+        UIStyle.styleFormTitle(phoneTitle);
+
+        personalFormPanel.add(nameTitle);
         nameField = new JTextField();
+        UIStyle.styleField(nameField);
         personalFormPanel.add(nameField);
 
-        personalFormPanel.add(new JLabel("Age:"));
-
+        personalFormPanel.add(ageTitle);
         ageField = new JTextField();
+        UIStyle.styleField(ageField);
         personalFormPanel.add(ageField);
 
-        personalFormPanel.add(new JLabel("Gender:"));
-
+        personalFormPanel.add(genderTitle);
         genderBox = new JComboBox<>(Gender.values());
+        UIStyle.styleComboBox(genderBox);
         personalFormPanel.add(genderBox);
 
-        personalFormPanel.add(new JLabel("Phone:"));
-
+        personalFormPanel.add(phoneTitle);
         phoneField = new JTextField();
+        UIStyle.styleField(phoneField);
         personalFormPanel.add(phoneField);
 
         personalPanel.add(
@@ -80,23 +96,30 @@ public class DoctorAddPanel extends JPanel {
 
         // Professional Information
         JPanel professionalPanel = new JPanel(new BorderLayout());
+        professionalPanel.setBackground(AppColors.WHITE);
+        professionalPanel.setBorder(UIStyle.createPanelBorder());
 
-        professionalPanel.add(
-                new JLabel("Professional Information"),
-                BorderLayout.NORTH
-        );
+        JLabel professInfo = new JLabel("Professional Information");
+        UIStyle.styleSubTitle(professInfo);
+        professionalPanel.add(professInfo, BorderLayout.NORTH);
 
-        JPanel professionalFormPanel =
-                new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel professionalFormPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+        professionalFormPanel.setBackground(AppColors.WHITE);
 
-        professionalFormPanel.add(new JLabel("Specialty:"));
+        JLabel specialtyTitle = new JLabel("Specialty:");
+        UIStyle.styleFormTitle(specialtyTitle);
+        professionalFormPanel.add(specialtyTitle);
 
         specialtyField = new JTextField();
+        UIStyle.styleField(specialtyField);
         professionalFormPanel.add(specialtyField);
 
-        professionalFormPanel.add(new JLabel("Ward:"));
+        JLabel wardTitle = new JLabel("Ward:");
+        UIStyle.styleFormTitle(wardTitle);
+        professionalFormPanel.add(wardTitle);
 
         wardBox = new JComboBox<>();
+        UIStyle.styleComboBox(wardBox);
 
         for (Ward ward : hospital.getWards()) {
             wardBox.addItem(ward);
@@ -104,19 +127,28 @@ public class DoctorAddPanel extends JPanel {
 
         professionalFormPanel.add(wardBox);
 
-        professionalFormPanel.add(new JLabel("Shift Start:"));
+        JLabel shiftSTitle = new JLabel("Shift Start:");
+        UIStyle.styleFormTitle(shiftSTitle);
+        professionalFormPanel.add(shiftSTitle);
 
         shiftStartField = new JTextField();
+        UIStyle.styleField(shiftStartField);
         professionalFormPanel.add(shiftStartField);
 
-        professionalFormPanel.add(new JLabel("Shift End:"));
+        JLabel shiftETitle = new JLabel("Shift End:");
+        UIStyle.styleFormTitle(shiftETitle);
+        professionalFormPanel.add(shiftETitle);
 
         shiftEndField = new JTextField();
+        UIStyle.styleField(shiftEndField);
         professionalFormPanel.add(shiftEndField);
 
-        professionalFormPanel.add(new JLabel("Capacity:"));
+        JLabel capacityTitle = new JLabel("Capacity:");
+        UIStyle.styleFormTitle(capacityTitle);
+        professionalFormPanel.add(capacityTitle);
 
         capacityField = new JTextField();
+        UIStyle.styleField(capacityField);
         professionalFormPanel.add(capacityField);
 
         professionalPanel.add(
@@ -134,6 +166,9 @@ public class DoctorAddPanel extends JPanel {
 
         JButton cancelBtn = new JButton("Cancel");
         JButton addDoctorBtn = new JButton("Add Doctor");
+
+        UIStyle.styleSecondaryButton(cancelBtn);
+        UIStyle.styleButton(addDoctorBtn);
 
         footerBtns.add(cancelBtn);
         footerBtns.add(addDoctorBtn);
