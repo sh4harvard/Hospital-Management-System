@@ -43,7 +43,6 @@ public class PatientEditPanel extends JPanel {
         nameField = new JTextField();
         ageField = new JTextField();
 
-        String[] genders = {"Male", "Female"};
         genderBox = new JComboBox<>(Gender.values());
 
 

@@ -37,6 +37,8 @@ public class MainFrame extends JFrame{
         add(contentPanel, BorderLayout.CENTER);
 
         setVisible(true);
+        BackgroundMusic music = new BackgroundMusic();
+        music.play();
 
         // Save data on program close
         addWindowListener(new WindowAdapter() {
@@ -50,6 +52,8 @@ public class MainFrame extends JFrame{
 
                     System.out.println("Database saved successfully.");
 
+                    music.stop();
+
                     dispose();
 
                 } catch (SQLException ex) {
@@ -62,6 +66,9 @@ public class MainFrame extends JFrame{
                             "Database Error",
                             JOptionPane.ERROR_MESSAGE
                     );
+
+                    music.stop();
+
                 }
             }
         });

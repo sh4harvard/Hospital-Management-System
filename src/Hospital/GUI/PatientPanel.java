@@ -41,6 +41,7 @@ public class PatientPanel extends JPanel {
 
         addPatient.addActionListener(e -> contentPanel.showPatientAdd());
 
+        patientsectionPanel.add(section, BorderLayout.WEST);
         patientsectionPanel.add(addPatient, BorderLayout.EAST);
         headerPanel.add(patientsectionPanel, BorderLayout.NORTH);
 
